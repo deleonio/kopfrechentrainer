@@ -1,0 +1,71 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Test, Build and Deliver
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Test, Build and Deliver
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 14.x
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: |
+          npm run lint
+          npm run format
+          npm run test
+          npm run coverage
+      - name: Build
+        run: npm run build
+      - name: Read package.json
+        id: package
+        run: |
+          content=`cat package.json | tr -d "\n"`
+          echo "::set-output name=json::$content"
+      - name: Git config
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      - name: Git tag
+        run: |
+          git tag -a v${{fromJson(steps.package.outputs.json).version}} -m "Tag version ${{fromJson(steps.package.outputs.json).version}}"
+          git push --tags
+      - name: Update changelog
+        run: |
+          npm install auto-changelog --no-save
+          npx auto-changelog
+          git add CHANGELOG.md
+          git commit -m "Update changelog"
+          git push
+      - name: Increment version
+        run: |
+          npm version prerelease --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "Increment version"
+          git push
+      - name: Deliver
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+        with:
+          ftp-server: ${{ secrets.FTP_HOST }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          known-hosts: ${{ secrets.FTP_KNOWN_HOSTS }}
+          local-dir: dist/
+          git-ftp-args: --all

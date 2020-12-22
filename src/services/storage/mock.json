@@ -1,0 +1,10 @@
+{
+  "profil": {
+    "minValue": 0,
+    "maxValue": 20
+  },
+  "watermarks": {
+    "dayLimit": 10
+  },
+  "results": []
+}

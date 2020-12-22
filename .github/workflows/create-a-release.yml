@@ -1,0 +1,32 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: GitHub CI - Create a Release
+
+on:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: '14.x'
+      - name: Read package.json
+        id: package
+        run: |
+          content=`cat package.json | tr -d "\n"`
+          echo "::set-output name=json::$content"
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: true
+          release_name: Release ${{fromJson(steps.package.outputs.json).version}}
+          tag_name: ${{fromJson(steps.package.outputs.json).version}}

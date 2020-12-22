@@ -1,0 +1,71 @@
+{
+  "name": "@deleonio/kopfrechentrainer",
+  "version": "1.0.0-rc.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deleonio/kopfrechentrainer.git"
+  },
+  "files": [
+    "dist/**",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack",
+    "coverage": "cross-env NODE_ENV=test nyc mocha",
+    "e2e": "nightwatch",
+    "serve": "cross-env NODE_ENV=development webpack serve --devtool=source-map",
+    "test": "cross-env NODE_ENV=test mocha",
+    "reinstall": "npm run remove && npm run update",
+    "remove": "rm -rf node_modules package-lock.json",
+    "start": "npm run serve -- --open=chrome",
+    "update": "npm install && npm update",
+    "cucumber": "cross-env NIGHTWATCH_ENV=chrome cucumber-js tests/cucumber/features/**/*.feature --require @babel/register --require cucumber.conf.js --require tests/cucumber/step-definitions --format node_modules/cucumber-pretty --format json:.reports/cucumber/report.json",
+    "format": "prettier --check {src,tests}/**",
+    "lint": "eslint {src,tests}/**/*.{html,js,json,jsx,ts,tsx,gql,graphql}"
+  },
+  "dependencies": {
+    "@ant-design/icons": "4.3.0",
+    "@leanup/form": "1.1.0-rc.240",
+    "@leanup/lib": "1.1.0-rc.239",
+    "antd": "4.9.4",
+    "preact": "10.5.7",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-router-dom": "5.2.0",
+    "register-service-worker": "1.7.2",
+    "rxjs": "6.6.3",
+    "tailwindcss": "2.0.2"
+  },
+  "devDependencies": {
+    "@leanup/cli": "1.1.0-rc.241",
+    "@leanup/cli-cucumber": "1.1.0-rc.241",
+    "@leanup/cli-preact": "1.1.0-rc.241",
+    "@leanup/cli-pwa": "^1.1.0-rc.241",
+    "@leanup/git-hooks": "1.1.0-rc.239",
+    "@leanup/stack": "1.1.0-rc.241",
+    "@leanup/stack-preact": "1.1.0-rc.241",
+    "@types/react-router-dom": "5.1.6",
+    "chromedriver": "87.0.4",
+    "cssnano": "4.1.10",
+    "geckodriver": "1.21.1",
+    "selenium-server": "3.141.59",
+    "semantic-release": "17.3.0",
+    "typescript": "4.1.3",
+    "workbox-cli": "6.0.2"
+  },
+  "description": "",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "{src,tests}/**/*.{html,js,json,jsx,ts,tsx,gql,graphql}": [
+      "eslint"
+    ],
+    "{src,tests}/**": [
+      "prettier --check"
+    ]
+  }
+}
