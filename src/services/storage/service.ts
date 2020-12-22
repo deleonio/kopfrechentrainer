@@ -16,7 +16,7 @@ export class StorageService {
     this.store();
   }
 
-  public getItem<T>(key: string): any {
+  public getItem<T>(key: string): T {
     return <T>this.memoryStorage[key];
   }
 
@@ -27,17 +27,17 @@ export class StorageService {
 
   private restore(): void {
     try {
-      const sessionStorage = window.sessionStorage.getItem(this.namespace);
-      if (sessionStorage === null) {
+      const localStorage = window.localStorage.getItem(this.namespace);
+      if (localStorage === null) {
         throw new Error('Session store is empty.');
       }
-      this.memoryStorage = <Object>JSON.parse(sessionStorage);
+      this.memoryStorage = <Object>JSON.parse(localStorage);
     } catch (error) {
       this.memoryStorage = <Object>require('./mock.json');
     }
   }
 
   private store(): void {
-    window.sessionStorage.setItem(this.namespace, JSON.stringify(this.memoryStorage));
+    window.localStorage.setItem(this.namespace, JSON.stringify(this.memoryStorage));
   }
 }

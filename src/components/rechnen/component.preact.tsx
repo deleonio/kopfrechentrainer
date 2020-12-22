@@ -1,7 +1,15 @@
-import { Badge, Button, Card, Col, Form, InputNumber, Row } from 'antd';
-import { FormInstance } from 'antd/lib/form';
+import Badge from 'antd/es/badge';
+import Button from 'antd/es/button';
+import Card from 'antd/es/card';
+import Form, { FormInstance } from 'antd/es/form';
+import Col from 'antd/es/grid/col';
+import Row from 'antd/es/grid/row';
+import InputNumber from 'antd/es/input-number';
+import Progress from 'antd/es/progress';
+import Modal from 'antd/lib/modal/Modal';
 import { createRef, h, JSX } from 'preact';
 
+import { TrophyTwoTone } from '@ant-design/icons';
 import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';
 
@@ -10,82 +18,171 @@ import { RechnenController } from './controller';
 export class RechnenComponent extends ReactComponent<unknown, RechnenController> implements GenericComponent {
   public ctrl: RechnenController = new RechnenController();
   private toggle = true;
-  public ergebnis: number = 0;
-  public ergebnisText: string = 'Richtig';
-  public ergebnisColor = '#0f0';
   private formRef = createRef<FormInstance>();
+  private isModalVisible = false;
 
   public render(): JSX.Element {
+    setTimeout(() => {
+      const button: HTMLButtonElement = document.querySelector('#aufgaben-erweitern') as HTMLButtonElement;
+      if (button instanceof HTMLButtonElement) {
+        button.setAttribute('disabled', 'disabled');
+        setTimeout(() => {
+          if (button instanceof HTMLButtonElement) {
+            button.removeAttribute('disabled');
+          }
+        }, 5000);
+      }
+    }, 50);
+    const progressData = this.ctrl.getDayProgress();
+    const percent = Math.round((progressData.right / progressData.limit) * 100);
+    if (percent >= 100) {
+      this.ctrl.ergebnisText = 'Glückwunsch';
+      this.ctrl.ergebnisColor = '#eb2f96';
+    }
     return (
-      <Form
-        ref={this.formRef}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinish={(values: any) => {
-          console.log('Success:', values);
-          this.ergebnis = values.ergebnis;
-          document.querySelector('#eingabe')?.setAttribute('disabled', 'disabled');
-          this.ergebnisText = this.ergebnis === this.ctrl.aufgabe.getErgebnis() ? 'Richtig' : 'Falsch';
-          this.ergebnisColor = this.ergebnis === this.ctrl.aufgabe.getErgebnis() ? '#0f0' : '#f00';
-          this.toggle = this.toggle === false;
-          this.forceUpdate();
-        }}
-        style={{
-          fontSize: '200%',
-        }}
-      >
-        <Row>
-          <Col span={24} style={{ textAlign: 'center' }}>
-            {this.ctrl.aufgabe.value[0]} <b>{this.ctrl.aufgabe.sign}</b> {this.ctrl.aufgabe.value[1]}
-          </Col>
-          <Col span={24} style={{ textAlign: 'center' }}>
-            =
-          </Col>
-          <Col span={24} style={{ textAlign: 'center' }}>
-            {this.toggle === true && (
-              <Form.Item name="ergebnis">
-                <InputNumber size="large" id="eingabe" type="number" />
-              </Form.Item>
-            )}
-            {this.toggle === false && <span>{this.ergebnis}</span>}
-          </Col>
-          {this.toggle === false && (
-            <Col span={24}>
-              <Badge.Ribbon text={this.ergebnisText} color={this.ergebnisColor}>
-                <Card>
-                  Das Ergebnis ist <b>{this.ctrl.aufgabe.getErgebnis()}</b>.
-                </Card>
-              </Badge.Ribbon>
-            </Col>
-          )}
-          <Col span={24} style={{ textAlign: 'center' }}>
-            {this.toggle === true && (
-              <Button type="primary" htmlType="submit" size="large">
-                Prüfen
-              </Button>
-            )}
-            {this.toggle === false && (
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => {
-                  this.ctrl.createAufgabe();
+      <div>
+        <Modal
+          title="Weitere Kopfrechenaufgabenestätigung"
+          visible={this.isModalVisible}
+          onOk={() => {
+            this.isModalVisible = false;
+            this.ctrl.incDayLimit(10);
+            this.forceUpdate();
+          }}
+          onCancel={() => {
+            this.isModalVisible = false;
+            this.forceUpdate();
+          }}
+          okText="Ja"
+          cancelText="Nein"
+        >
+          <p>Möchtest Du wirklich weitere Kopfrechenaufgaben lösen?</p>
+        </Modal>
+        <h1>Rechnen trainieren</h1>
+        <Badge.Ribbon text={this.ctrl.ergebnisText} color={this.ctrl.ergebnisColor}>
+          <Card>
+            {percent < 100 && (
+              <Form
+                ref={this.formRef}
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={(values: { ergebnis: number }) => {
+                  this.ctrl.storeResult(values.ergebnis);
+                  document.querySelector('#eingabe')?.setAttribute('disabled', 'disabled');
+                  this.ctrl.ergebnisText = values.ergebnis === this.ctrl.aufgabe.getErgebnis() ? 'Richtig' : 'Falsch';
+                  this.ctrl.ergebnisColor = values.ergebnis === this.ctrl.aufgabe.getErgebnis() ? '#52c41a' : '#e2313b';
                   this.toggle = this.toggle === false;
-                  this.formRef.current.resetFields();
                   setTimeout(() => {
-                    document.querySelector('#eingabe')?.removeAttribute('disabled');
-                    console.log(document.querySelector('#eingabe'));
-                    document.querySelector('#eingabe')?.focus();
+                    const button: HTMLButtonElement = document.querySelector('#neue-aufgabe') as HTMLButtonElement;
+                    const erweitern: HTMLButtonElement = document.querySelector(
+                      '#aufgaben-erweitern'
+                    ) as HTMLButtonElement;
+                    if (button instanceof HTMLButtonElement) {
+                      button.setAttribute('disabled', 'disabled');
+                      setTimeout(() => {
+                        if (button instanceof HTMLButtonElement) {
+                          button.removeAttribute('disabled');
+                          button.focus();
+                          // button.click();
+                        }
+                      }, 1000);
+                    }
+                    if (erweitern instanceof HTMLButtonElement) {
+                      erweitern.setAttribute('disabled', 'disabled');
+                      setTimeout(() => {
+                        if (erweitern instanceof HTMLButtonElement) {
+                          erweitern.removeAttribute('disabled');
+                        }
+                      }, 5000);
+                    }
                   }, 50);
                   this.forceUpdate();
                 }}
+                onReset={() => {
+                  this.ctrl.createAufgabe();
+                  this.toggle = this.toggle === false;
+                  this.formRef?.current?.resetFields();
+                  setTimeout(() => {
+                    const input: HTMLInputElement = document.querySelector('#eingabe') as HTMLInputElement;
+                    input.removeAttribute('disabled');
+                    input.focus();
+                  }, 50);
+                  this.forceUpdate();
+                }}
+                style={{
+                  fontSize: '200%',
+                }}
               >
-                Nächste Aufgabe
-              </Button>
+                <Row>
+                  <Col span={24} style={{ textAlign: 'center' }}>
+                    {this.ctrl.aufgabe.values[0]} <b>{this.ctrl.aufgabe.sign}</b> {this.ctrl.aufgabe.values[1]}
+                  </Col>
+                  <Col span={24} style={{ textAlign: 'center' }}>
+                    =
+                  </Col>
+                  <Col span={24} style={{ textAlign: 'center' }}>
+                    <Form.Item name="ergebnis">
+                      <InputNumber
+                        style={{ fontWeight: 'bold' }}
+                        maxLength={4}
+                        required
+                        size="large"
+                        id="eingabe"
+                        type="number"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                {this.toggle === true && (
+                  <Row>
+                    <Col span={24} style={{ textAlign: 'center' }}>
+                      <Button type="primary" htmlType="submit" size="large">
+                        Prüfen
+                      </Button>
+                    </Col>
+                  </Row>
+                )}
+                {this.toggle === false && (
+                  <Row>
+                    <Col span={24} style={{ textAlign: 'center' }}>
+                      <Button type="primary" id="neue-aufgabe" disabled htmlType="reset" size="large">
+                        Nächste Aufgabe
+                      </Button>
+                    </Col>
+                    <Col span={24} style={{ textAlign: 'center' }}>
+                      <hr />
+                      Das Ergebnis ist <b>{this.ctrl.aufgabe.getErgebnis()}</b>.
+                    </Col>
+                  </Row>
+                )}
+              </Form>
             )}
-          </Col>
-        </Row>
-      </Form>
+            <Row>
+              <Col span={24} style={{ textAlign: 'center' }}>
+                {percent >= 100 && <TrophyTwoTone style={{ fontSize: '600%', margin: '20px' }} />}
+                <br />
+                <Progress percent={percent} success={{ percent: percent }} />
+              </Col>
+              {percent >= 100 && (
+                <Col span={24} style={{ textAlign: 'center' }}>
+                  <br />
+                  <Button
+                    type="primary"
+                    disabled
+                    id="aufgaben-erweitern"
+                    onClick={() => {
+                      this.isModalVisible = true;
+                      this.forceUpdate();
+                    }}
+                  >
+                    10 weitere Aufgabe angehen
+                  </Button>
+                </Col>
+              )}
+            </Row>
+          </Card>
+        </Badge.Ribbon>
+      </div>
     );
   }
 }

@@ -12,12 +12,12 @@ if (ENVs.NODE_ENV === 'development') {
   require('preact/debug');
 }
 
+require('./shares/constant');
 DI.register('Framework', {
   ...require('preact/package.json'),
   name: 'Preact',
 });
 require('./shares/register');
-require('./shares/routing');
 
 const htmlDivElement: HTMLDivElement | null = document.querySelector('div#app');
 if (htmlDivElement instanceof HTMLDivElement) {

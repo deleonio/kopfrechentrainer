@@ -3,7 +3,7 @@
     "experimentalDecorators": true,
     "pretty": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "ESNext",
     "allowSyntheticDefaultImports": true,
     "preserveConstEnums": true,
     "sourceMap": true,

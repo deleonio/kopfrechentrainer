@@ -1,0 +1,36 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Test, Build and Deliver
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Test, Build and Deliver
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 14.x
+      - name: Install
+        run: npm ci
+      # - name: Test
+      #   run: |
+      #     npm run lint
+      #     npm run format
+      #     npm run test
+      #     npm run coverage
+      - name: Build
+        run: npm run build
+      - name: Deliver
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+        with:
+          ftp-server: ${{ secrets.FTP_HOST }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          known-hosts: ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLTLK5RTvhK7tiPRxnTo9iAyLFFDZm96OpM3PwAwtq/PtMVRDgwf4Y3d+IpiX098mbRZuuztbMdUiRcSlYBY+o4=
+          local-dir: dist
+          git-ftp-args: --all
