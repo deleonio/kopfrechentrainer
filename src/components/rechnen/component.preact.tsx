@@ -23,6 +23,13 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
 
   public render(): JSX.Element {
     setTimeout(() => {
+      const input: HTMLInputElement = document.querySelector('#eingabe') as HTMLInputElement;
+      if (input instanceof HTMLInputElement) {
+        input.removeAttribute('disabled');
+        input.focus();
+      }
+    }, 50);
+    setTimeout(() => {
       const button: HTMLButtonElement = document.querySelector('#aufgaben-erweitern') as HTMLButtonElement;
       if (button instanceof HTMLButtonElement) {
         button.setAttribute('disabled', 'disabled');
@@ -74,9 +81,6 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                   this.toggle = this.toggle === false;
                   setTimeout(() => {
                     const button: HTMLButtonElement = document.querySelector('#neue-aufgabe') as HTMLButtonElement;
-                    const erweitern: HTMLButtonElement = document.querySelector(
-                      '#aufgaben-erweitern'
-                    ) as HTMLButtonElement;
                     if (button instanceof HTMLButtonElement) {
                       button.setAttribute('disabled', 'disabled');
                       setTimeout(() => {
@@ -87,14 +91,6 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                         }
                       }, 1000);
                     }
-                    if (erweitern instanceof HTMLButtonElement) {
-                      erweitern.setAttribute('disabled', 'disabled');
-                      setTimeout(() => {
-                        if (erweitern instanceof HTMLButtonElement) {
-                          erweitern.removeAttribute('disabled');
-                        }
-                      }, 5000);
-                    }
                   }, 50);
                   this.forceUpdate();
                 }}
@@ -102,11 +98,6 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                   this.ctrl.createAufgabe();
                   this.toggle = this.toggle === false;
                   this.formRef?.current?.resetFields();
-                  setTimeout(() => {
-                    const input: HTMLInputElement = document.querySelector('#eingabe') as HTMLInputElement;
-                    input.removeAttribute('disabled');
-                    input.focus();
-                  }, 50);
                   this.forceUpdate();
                 }}
                 style={{
