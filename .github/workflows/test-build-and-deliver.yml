@@ -30,9 +30,9 @@ jobs:
       - name: Deliver
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
         with:
-          ftp-server: sftp://home292045786.1and1-data.host
-          ftp-username: u54145776-apps
-          ftp-password: "mg3.cAwq8z3Er@@"
-          known-hosts: "home292045786.1and1-data.host ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/tKA7T9UUfVZ4gSGezw3t98UQcWwtHqPildhNL7F4SKhhXJorT01hwqsTVPXz9Emr1IzS9iOvvynqh7N3xSs01qoucho8WeantCVI5H7Vwt00qS8z8BRiYk1WpyzJfUCNUUHSJhF5SJd03uWrP19AhGsqqj7/24IzGhqxN/FqHgHdBRkQB//XlHhw5e03DPkr5jQRlHjSb9lkWily0/meBTkd7lFRC2n0sT/KE4XbjpvQlc2IUIIeWHJfcsJgpaGcDFboN9oV//voE4A0pdAFwE4OByVDZa/ifgXRlT0k5vVS+EaxTtH8idiu6ZV/P7dLMDo7b76KTSxlSixn7hPh"
+          ftp-server: ${{ secrets.FTP_HOST }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          known-hosts: ${{ secrets.FTP_KNOWN_HOSTS }}
           local-dir: dist/
-          dry-run: true
+          git-ftp-args: --all
