@@ -30,7 +30,7 @@ jobs:
       - name: Deliver
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
         with:
-          ftp-server: home292045786.1and1-data.host
+          ftp-server: sftp://home292045786.1and1-data.host
           ftp-username: u54145776-apps
           ftp-password: "mg3.cAwq8z3Er@@"
           known-hosts: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLTLK5RTvhK7tiPRxnTo9iAyLFFDZm96OpM3PwAwtq/PtMVRDgwf4Y3d+IpiX098mbRZuuztbMdUiRcSlYBY+o4="
