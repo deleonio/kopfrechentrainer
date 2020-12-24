@@ -19,20 +19,20 @@ jobs:
           node-version: 14.x
       - name: Install
         run: npm ci
-      # - name: Test
-      #   run: |
-      #     npm run lint
-      #     npm run format
-      #     npm run test
-      #     npm run coverage
+      - name: Test
+        run: |
+          npm run lint
+          npm run format
+          npm run test
+          npm run coverage
       - name: Build
         run: npm run build
       - name: Deliver
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: home292045786.1and1-data.host
+          username: u54145776-apps
+          password: mg3.cAwq8z3Er@@
           known-hosts: ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLTLK5RTvhK7tiPRxnTo9iAyLFFDZm96OpM3PwAwtq/PtMVRDgwf4Y3d+IpiX098mbRZuuztbMdUiRcSlYBY+o4=
-          local-dir: dist
-          git-ftp-args: --all
+          local-dir: dist/
+          dry-run: true
