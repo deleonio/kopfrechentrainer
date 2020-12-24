@@ -33,6 +33,4 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          known-hosts: ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLTLK5RTvhK7tiPRxnTo9iAyLFFDZm96OpM3PwAwtq/PtMVRDgwf4Y3d+IpiX098mbRZuuztbMdUiRcSlYBY+o4=
-          local-dir: dist
-          git-ftp-args: --all
+          local-dir: dist/
