@@ -4,7 +4,9 @@
 name: Test, Build and Deliver
 
 on:
-  - push
+  - push:
+    branches:
+      - main
   - workflow_dispatch
 
 jobs:
