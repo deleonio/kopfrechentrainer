@@ -38,11 +38,12 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # npm version prerelease
-          npm version prerelease --no-git-tag-version
-          git add package.json package-lock.json
-          git commit -m "Increment version"
+          npm version prerelease
+          # npm version prerelease --no-git-tag-version
+          # git add package.json package-lock.json
+          # git commit -m "Increment version"
           git status
+          git push
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
