@@ -27,6 +27,19 @@ jobs:
           npm run coverage
       - name: Build
         run: npm run build
+      - name: Commit changed files
+        run: |
+          npm version prerelease
+          npm install --package-lock-only
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json package-lock.json
+          git status
+          git commit -m "Increment version"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Deliver
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
         with:
