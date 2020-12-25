@@ -17,6 +17,11 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: 14.x
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
       - name: Install
         run: npm ci
       - name: Test
@@ -29,10 +34,11 @@ jobs:
         run: npm run build
       - name: Commit changed files
         run: |
-          npm version prerelease
-          npm install --package-lock-only
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          npm version prerelease
+          # npm version prerelease --no-git-tag-version
+          npm install --package-lock-only
           git add package.json package-lock.json
           git status
           git commit -m "Increment version"
