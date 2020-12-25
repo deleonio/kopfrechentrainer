@@ -42,6 +42,7 @@ jobs:
           npm version prerelease --no-git-tag-version
           git add package.json package-lock.json
           git commit-m "Increment version"
+          git status
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
