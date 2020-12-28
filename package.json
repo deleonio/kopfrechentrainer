@@ -43,7 +43,7 @@
     "@leanup/cli-pwa": "^1.1.0-rc.241",
     "@leanup/git-hooks": "1.1.0-rc.239",
     "@leanup/stack": "1.1.0-rc.241",
-    "@leanup/stack-preact": "1.1.0-rc.241",
+    "@leanup/stack-preact": "1.1.0-rc.242",
     "@types/react-router-dom": "5.1.6",
     "chromedriver": "87.0.4",
     "cssnano": "4.1.10",
