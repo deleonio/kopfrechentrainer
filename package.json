@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "4.3.0",
-    "@leanup/form": "1.1.0-rc.240",
+    "@leanup/form": "1.1.0-rc.243",
     "@leanup/lib": "1.1.0-rc.239",
     "antd": "4.9.4",
     "preact": "10.5.7",
