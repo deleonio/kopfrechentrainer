@@ -30,8 +30,8 @@ jobs:
         run: |
           npm run lint
           npm run format
-          npm run test
-          npm run coverage
+          # npm run test
+          # npm run coverage
       - name: Build
         run: npm run build
       - name: Read package.json
