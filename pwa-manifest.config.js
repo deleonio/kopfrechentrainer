@@ -4,7 +4,7 @@ module.exports = {
   short_name: 'Rechentrainer',
   description: '...',
   lang: 'de-DE',
-  start_url: 'https://github.modevel.de/rechnen/',
+  start_url: 'https://app.modevel.de/rechnen/',
   display: 'standalone',
   orientation: 'any',
   theme_color: '#e2313b',

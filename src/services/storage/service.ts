@@ -6,7 +6,7 @@ export class StorageService {
   private memoryStorage: INameToValueMap = {};
   private namespace: string;
 
-  public constructor(namespace = 'app-store') {
+  public constructor(namespace = 'app-store-rechnen') {
     this.namespace = namespace;
     this.restore();
   }
