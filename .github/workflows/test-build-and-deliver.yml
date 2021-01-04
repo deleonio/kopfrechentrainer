@@ -33,7 +33,11 @@ jobs:
           # npm run test
           # npm run coverage
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          mv dist rechnen
+          mkdir dist
+          mv rechnen dist/rechnen
       - name: Read package.json
         id: package
         run: |
