@@ -68,5 +68,5 @@ jobs:
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           known-hosts: ${{ secrets.FTP_KNOWN_HOSTS }}
           local-dir: dist/
-          server-dir: rechnen/
+          server-dir: /apps/rechnen/
           git-ftp-args: --all
