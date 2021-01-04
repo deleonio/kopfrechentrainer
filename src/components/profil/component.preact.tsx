@@ -1,4 +1,4 @@
-import { Card, Form, Row } from 'antd';
+import { Card, Form, message, Row } from 'antd';
 import Button from 'antd/es/button';
 import Col from 'antd/es/grid/col';
 import InputNumber from 'antd/es/input-number';
@@ -13,6 +13,8 @@ import { ProfilController } from './controller';
 export class ProfilComponent extends ReactComponent<unknown, ProfilController> implements GenericComponent {
   public readonly ctrl: ProfilController = new ProfilController();
   private isModalVisible = false;
+  private timeoutRange: NodeJS.Timeout | undefined;
+  private timeoutLimit: NodeJS.Timeout | undefined;
 
   render(): JSX.Element {
     return (
@@ -23,6 +25,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           onOk={() => {
             this.isModalVisible = false;
             this.ctrl.clearStore();
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            message.success('Speicher wurden bereinigt.', 10);
             this.forceUpdate();
           }}
           onCancel={() => {
@@ -45,10 +49,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
         >
           <Card>
             <h2>Zahlenbereich einstellen</h2>
-            <p>
-              Gebe hier die kleinste und größte Zahl ein, innerhalb derer die Rechenaufgaben generiert werden sollen.
-            </p>
-            <Row>
+            <p>Gebe hier eine Zahl größer als 0 ein, bis welcher die Rechenaufgaben generiert werden sollen.</p>
+            {/* <Row>
               <Col>
                 <Form.Item label="Kleinste Zahl" name="minValue">
                   <InputNumber
@@ -66,7 +68,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                   />
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
               <Col>
                 <Form.Item label="Größte Zahl" name="maxValue">
@@ -78,7 +80,13 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     max={999}
                     onChange={(maxValue) => {
                       if (typeof maxValue === 'number') {
-                        this.ctrl.setRange(this.ctrl.minValue, maxValue);
+                        this.ctrl.setRange(0, maxValue);
+                        // this.ctrl.setRange(this.ctrl.minValue, maxValue);
+                        clearTimeout(this.timeoutRange as NodeJS.Timeout);
+                        this.timeoutRange = setTimeout(() => {
+                          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                          message.success('Größte Zahl wurden gespeichert.', 10);
+                        }, 1000);
                       }
                       this.forceUpdate();
                     }}
@@ -100,6 +108,11 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     onChange={(dayLimit) => {
                       if (typeof dayLimit === 'number') {
                         this.ctrl.setDayLimit(dayLimit);
+                        clearTimeout(this.timeoutLimit as NodeJS.Timeout);
+                        this.timeoutLimit = setTimeout(() => {
+                          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                          message.success('Aufgaben pro Tag wurden gespeichert.', 10);
+                        }, 1000);
                       }
                       this.forceUpdate();
                     }}
