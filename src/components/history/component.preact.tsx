@@ -41,7 +41,7 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
 
     return (
       <div>
-        <canvas ref={this.chart} width="100%" height="80vh"></canvas>
+        <canvas ref={this.chart} width="100%" height="50vh"></canvas>
         <hr />
         <Table dataSource={this.dataSource} pagination={{ position: ['topCenter'] }} columns={columns} />
       </div>
