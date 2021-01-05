@@ -60,7 +60,9 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
             </Switch>
           </Router>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>© 2020 - v{APP_METADATE.version}</Footer>
+        <Footer style={{ textAlign: 'center' }}>
+          © ${new Date(Date.now()).getFullYear()} - v{APP_METADATE.version}
+        </Footer>
       </Layout>
     );
   }

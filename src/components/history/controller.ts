@@ -53,12 +53,6 @@ export class HistoryController extends AbstractController {
         });
       });
     });
-    for (let i = 0; i < 10; i++) {
-      labels.push(`${i}`);
-      const right = Math.random();
-      datasets[0].data?.push(right);
-      datasets[1].data?.push(1 - right);
-    }
     new Chart(ref, {
       type: 'line',
       data: {

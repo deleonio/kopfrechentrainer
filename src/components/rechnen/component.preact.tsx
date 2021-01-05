@@ -36,7 +36,7 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
   private onReset() {
     this.isSubmitted = false;
     this.ctrl.createAufgabe();
-    this.toggle = this.toggle === false;
+    this.toggle = true;
     this.formRef?.current?.resetFields();
     this.isEingabeDisabled = false;
 
