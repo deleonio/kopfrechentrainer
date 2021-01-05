@@ -61,7 +61,7 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
           </Router>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          © ${new Date(Date.now()).getFullYear()} - v{APP_METADATE.version}
+          © {new Date(Date.now()).getFullYear()} - v{APP_METADATE.version}
         </Footer>
       </Layout>
     );
