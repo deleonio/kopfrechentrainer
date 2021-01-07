@@ -37,11 +37,17 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
         key: 'wrong',
         align: 'right' as const,
       },
+      {
+        title: 'Gesamt',
+        dataIndex: 'sum',
+        key: 'sum',
+        align: 'right' as const,
+      },
     ];
 
     return (
       <div>
-        <canvas ref={this.chart} width="100%" height="50vh"></canvas>
+        <canvas ref={this.chart} width="100%" height="500px"></canvas>
         <hr />
         <Table dataSource={this.dataSource} pagination={{ position: ['topCenter'] }} columns={columns} />
       </div>

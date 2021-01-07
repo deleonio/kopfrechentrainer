@@ -8,6 +8,7 @@ import InputNumber from 'antd/es/input-number';
 import Progress from 'antd/es/progress';
 import Modal from 'antd/lib/modal/Modal';
 import { createRef, h, JSX } from 'preact';
+import { KeyboardEventHandler } from 'react';
 
 import { TrophyTwoTone } from '@ant-design/icons';
 import { GenericComponent } from '@leanup/lib/components/generic';
@@ -31,6 +32,18 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
         input.focus();
       }
     }, 50);
+  }
+
+  private onKeyUp(event: unknown): void {
+    const target: HTMLInputElement = event.target as HTMLInputElement;
+    const button: HTMLButtonElement = document.querySelector('#pruefen') as HTMLButtonElement;
+    if (button instanceof HTMLButtonElement) {
+      if (target.value === '') {
+        button.setAttribute('disabled', 'disabled');
+      } else {
+        button.removeAttribute('disabled');
+      }
+    }
   }
 
   private onReset() {
@@ -159,6 +172,8 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                         style={{ fontWeight: 'bold' }}
                         maxLength={4}
                         required
+                        min={0}
+                        onKeyUp={this.onKeyUp.bind(this)}
                         size="large"
                         id="eingabe"
                         type="number"
@@ -169,7 +184,7 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                 {this.toggle === true && (
                   <Row>
                     <Col span={24} style={{ textAlign: 'center' }}>
-                      <Button type="primary" htmlType="submit" size="large">
+                      <Button type="primary" id="pruefen" htmlType="submit" size="large">
                         Prüfen
                       </Button>
                     </Col>

@@ -17,10 +17,10 @@ interface AufgabeStore {
 export class HistoryController extends AbstractController {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
 
-  public drawChart(ref: HTMLCanvasElement): { date: string; right: number; wrong: number }[] {
+  public drawChart(ref: HTMLCanvasElement): { date: string; right: number; wrong: number; sum: number }[] {
     const orderedResults = this.getOrderedResults();
     const labels: string[] = [];
-    const dataSource: { date: string; right: number; wrong: number }[] = [];
+    const dataSource: { date: string; right: number; wrong: number; sum: number }[] = [];
     const datasets: ChartDataSets[] = [
       {
         label: 'Richtig',
@@ -49,6 +49,7 @@ export class HistoryController extends AbstractController {
             date: `${day}.${month + 1}.${year}`,
             right: result.right,
             wrong: result.wrong,
+            sum: result.right + result.wrong,
           });
         });
       });
