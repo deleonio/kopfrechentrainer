@@ -8,6 +8,7 @@ import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';
 
 import { HistoryComponent } from '../history/component.preact';
+import { InfoComponent } from '../info/component.preact';
 import { ProfilComponent } from '../profil/component.preact';
 import { RechnenComponent } from '../rechnen/component.preact';
 import { AppController } from './controller';
@@ -43,6 +44,9 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
             <Menu.Item key="2">
               <a href="#profil">Profil</a>
             </Menu.Item>
+            <Menu.Item key="3">
+              <a href="#info">Info</a>
+            </Menu.Item>
           </Menu>
         </Header>
         <Content style={{ backgroundColor: 'white', padding: '25px' }}>
@@ -56,6 +60,9 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
               </Route>
               <Route exact path="/profil">
                 <ProfilComponent />
+              </Route>
+              <Route exact path="/info">
+                <InfoComponent />
               </Route>
             </Switch>
           </Router>
