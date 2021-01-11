@@ -10,7 +10,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "cp -r public dist && cross-env NODE_ENV=production webpack",
     "coverage": "cross-env NODE_ENV=test nyc mocha",
     "e2e": "nightwatch",
     "serve": "cross-env NODE_ENV=development webpack serve --devtool=source-map",

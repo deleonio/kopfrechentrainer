@@ -7,8 +7,8 @@ module.exports = {
   start_url: 'https://github.modevel.de/rechnen/',
   display: 'fullscreen',
   orientation: 'any',
-  theme_color: '#e2313b',
-  background_color: '#e2313b',
+  theme_color: '#ddd',
+  background_color: '#ddd',
   filename: 'manifest.json',
   icons: [
     {
