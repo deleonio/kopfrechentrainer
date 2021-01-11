@@ -115,6 +115,7 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                   this.isSubmitted = true;
                   this.ctrl.storeResult(values.ergebnis);
                   document.querySelector('#eingabe')?.setAttribute('disabled', 'disabled');
+                  this.ctrl.aufgabe.result = values.ergebnis;
                   this.ctrl.ergebnisText = values.ergebnis === this.ctrl.aufgabe.getErgebnis() ? 'Richtig' : 'Falsch';
                   this.ctrl.ergebnisColor = values.ergebnis === this.ctrl.aufgabe.getErgebnis() ? '#52c41a' : '#e2313b';
                   this.toggle = this.toggle === false;

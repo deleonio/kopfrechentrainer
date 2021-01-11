@@ -26,7 +26,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
             this.isModalVisible = false;
             this.ctrl.clearStore();
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            message.success('Speicher wurden bereinigt.', 10);
+            message.success('Speicher wurden bereinigt.');
             this.forceUpdate();
           }}
           onCancel={() => {
@@ -85,7 +85,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                         clearTimeout(this.timeoutRange as NodeJS.Timeout);
                         this.timeoutRange = setTimeout(() => {
                           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                          message.success('Größte Zahl wurden gespeichert.', 10);
+                          message.success('Größte Zahl wurden gespeichert.');
                         }, 1000);
                       }
                       this.forceUpdate();
@@ -111,7 +111,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                         clearTimeout(this.timeoutLimit as NodeJS.Timeout);
                         this.timeoutLimit = setTimeout(() => {
                           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                          message.success('Aufgaben pro Tag wurden gespeichert.', 10);
+                          message.success('Aufgaben pro Tag wurden gespeichert.');
                         }, 1000);
                       }
                       this.forceUpdate();

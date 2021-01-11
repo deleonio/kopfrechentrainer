@@ -1,6 +1,6 @@
 import { DI } from '@leanup/lib/helpers/injector';
 
-import { StorageService } from './storage/service';
+import { StorageService } from '../storage/service';
 
 export abstract class RechenAufgabe {
   public readonly sign: string = '';
@@ -36,6 +36,11 @@ class RechenAufgabeSubtraktion extends RechenAufgabe {
 
 export class AufgabenService {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
+  public aufgabe: RechenAufgabe;
+
+  constructor() {
+    this.aufgabe = this.newAufgabe();
+  }
 
   private getRandomInt(max: number) {
     return Math.floor(Math.random() * Math.floor(max + 1));
@@ -53,20 +58,26 @@ export class AufgabenService {
 
   private newAufgabe(): RechenAufgabe {
     const profil = this.getProfil();
-    switch (this.getRandomInt(1)) {
-      case 0:
-        return new RechenAufgabeAddition([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
-      default:
-        return new RechenAufgabeSubtraktion([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
-    }
+    let aufgabe: RechenAufgabe;
+    do {
+      switch (this.getRandomInt(1)) {
+        case 0:
+          aufgabe = new RechenAufgabeAddition([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
+          break;
+        default:
+          aufgabe = new RechenAufgabeSubtraktion([
+            this.getRandomInt(profil.maxValue),
+            this.getRandomInt(profil.maxValue),
+          ]);
+      }
+    } while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue);
+    return aufgabe;
   }
 
   public createAufgabe(): RechenAufgabe {
-    const profil = this.getProfil();
-    let aufgabe: RechenAufgabe = this.newAufgabe();
-    while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue) {
-      aufgabe = this.createAufgabe();
+    if (this.aufgabe.result !== null) {
+      this.aufgabe = this.newAufgabe();
     }
-    return aufgabe;
+    return this.aufgabe;
   }
 }

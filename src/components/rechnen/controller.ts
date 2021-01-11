@@ -1,7 +1,7 @@
 import { AbstractController } from '@leanup/lib/components/generic';
 import { DI } from '@leanup/lib/helpers/injector';
 
-import { AufgabenService, RechenAufgabe } from '../../services/aufgaben.service';
+import { AufgabenService, RechenAufgabe } from '../../services/aufgaben/service';
 import { StorageService } from '../../services/storage/service';
 
 interface AufgabeStore {
@@ -106,6 +106,11 @@ export class RechnenController extends AbstractController {
     const rightWrongSum = this.getRightWrongSum(
       orderedResults[date.getFullYear()][date.getMonth()][date.getDate()] || []
     );
+    if (rightWrongSum.sum === 0) {
+      this.storageService.setItem('watermarks', {
+        dayLimit: 10,
+      });
+    }
     return {
       ...rightWrongSum,
       limit: watermarks.dayLimit,

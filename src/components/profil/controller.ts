@@ -27,7 +27,7 @@ export class ProfilController extends AbstractController {
   public setRange(minValue: number, maxValue: number): void {
     minValue = Math.floor(minValue);
     maxValue = Math.floor(maxValue);
-    if (minValue < maxValue) {
+    if (minValue < maxValue && 0 <= minValue && 20 <= maxValue) {
       this.storageService.setItem('profil', {
         minValue: minValue,
         maxValue: maxValue,
@@ -37,9 +37,11 @@ export class ProfilController extends AbstractController {
 
   public setDayLimit(dayLimit: number): void {
     dayLimit = Math.floor(dayLimit);
-    this.storageService.setItem('watermarks', {
-      dayLimit: dayLimit,
-    });
+    if (10 <= dayLimit) {
+      this.storageService.setItem('watermarks', {
+        dayLimit: dayLimit,
+      });
+    }
   }
 
   public clearStore(): void {
