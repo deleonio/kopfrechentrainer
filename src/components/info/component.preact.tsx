@@ -17,16 +17,21 @@ export class InfoComponent extends ReactComponent<unknown, InfoController> imple
           <h2>Datenschutz</h2>
           <p>
             Diese Anwendung wird als gesamtheitliches Anwendungsartefakt heruntergeladen und im Browser des Nutzers
-            gestartet. Die Anwendung besitzt keine Kommunikationsschnittstellen zu externen Systemen, so dass alle
-            erhobenen Daten (Spiel-Ergebnisse) im Browserspeicher auf dem Gerät des Nutzers verbleiben. Wird der
-            Zwischenspeicher (Verlauf leeren) des Browsers gelöscht, so sind auch alle erhobenen Daten unwiderruflich
-            gelöscht.
+            gestartet. Die Anwendung besitzt <strong>keine Kommunikationsschnittstellen</strong> zu externen Systemen,
+            so dass{' '}
+            <strong>
+              alle erhobenen Daten (Spiel-Ergebnisse) im Browserspeicher auf dem Gerät des Nutzers verbleiben
+            </strong>
+            . Wird der Zwischenspeicher (Verlauf geleert) des Browsers gelöscht, so sind auch alle erhobenen Daten
+            unwiderruflich gelöscht.
           </p>
         </Card>
         <br />
         <Card>
           <h2>OpenSource</h2>
-          <p>Der Anwendungscode ist OpenSource und unterliegt der Apache 2.0 Lizenz.</p>
+          <p>
+            Der Anwendungscode ist <strong>OpenSource</strong> und unterliegt der <strong>Apache 2.0 Lizenz</strong>.
+          </p>
         </Card>
       </div>
     );
