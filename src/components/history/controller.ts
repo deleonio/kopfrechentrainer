@@ -19,15 +19,16 @@ export class HistoryController extends AbstractController {
 
   public drawChart(ref: HTMLCanvasElement): { date: string; right: number; wrong: number; sum: number }[] {
     const orderedResults = this.getOrderedResults();
+    console.log(orderedResults);
     const labels: string[] = [];
     const dataSource: { date: string; right: number; wrong: number; sum: number }[] = [];
     const datasets: ChartDataSets[] = [
       {
         label: 'Richtig',
         data: [],
-        borderColor: ['rgba(100,200,200,1)'],
+        borderColor: 'rgba(100,200,200,1)',
         backgroundColor: 'rgba(100,200,200,.25)',
-        borderWidth: 2,
+        borderWidth: 1,
       },
       {
         label: 'Falsch',
@@ -35,7 +36,6 @@ export class HistoryController extends AbstractController {
         borderColor: 'rgba(255,125,150,1)',
         backgroundColor: 'rgba(255,125,150,.25)',
         borderWidth: 1,
-        fill: '-1',
       },
     ];
     orderedResults.forEach((yearResults: AufgabeStore[][][], year: number) => {
@@ -43,8 +43,10 @@ export class HistoryController extends AbstractController {
         monthResults.forEach((dayResults: AufgabeStore[], day: number) => {
           const result = this.getRightWrongSum(dayResults);
           labels.push(`${day}.${month + 1}.${year}`);
-          datasets[0].data?.push(result.right / result.sum);
-          datasets[1].data?.push(result.wrong / result.sum);
+          datasets[0].data?.push(result.right);
+          datasets[1].data?.push(result.wrong);
+          // datasets[0].data?.push(result.right / result.sum);
+          // datasets[1].data?.push(result.wrong / result.sum);
           dataSource.push({
             date: `${day}.${month + 1}.${year}`,
             right: result.right,
@@ -55,7 +57,7 @@ export class HistoryController extends AbstractController {
       });
     });
     new Chart(ref, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: labels,
         datasets: datasets,
@@ -64,14 +66,11 @@ export class HistoryController extends AbstractController {
         scales: {
           yAxes: [
             {
-              stacked: true,
+              ticks: {
+                beginAtZero: true,
+              },
             },
           ],
-        },
-        plugins: {
-          filler: {
-            propagate: true,
-          },
         },
       },
     });

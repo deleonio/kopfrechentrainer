@@ -47,7 +47,7 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
 
     return (
       <div>
-        <div height="500px">
+        <div style={{ height: '500px' }}>
           <canvas ref={this.chart} width="100%" height="100%"></canvas>
         </div>
         <hr />
