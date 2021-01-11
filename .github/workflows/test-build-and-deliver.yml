@@ -67,7 +67,6 @@ jobs:
           scope: '@deleonio'
       - name: Publish
         run: npm publish --access restricted
-        working-directory: generated/typescript-rxjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Increment version
