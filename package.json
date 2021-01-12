@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "4.3.0",
-    "@leanup/form": "^1.1.0-rc.263",
+    "@leanup/form": "^1.1.0-rc.265",
     "@leanup/lib": "^1.1.0-rc.263",
     "antd": "4.10.2",
     "chart.js": "2.9.4",
