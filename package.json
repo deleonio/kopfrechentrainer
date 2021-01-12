@@ -41,7 +41,7 @@
     "@leanup/cli": "^1.1.0-rc.263",
     "@leanup/cli-cucumber": "^1.1.0-rc.263",
     "@leanup/cli-preact": "^1.1.0-rc.263",
-    "@leanup/cli-pwa": "^1.1.0-rc.263",
+    "@leanup/cli-pwa": "^1.1.0-rc.265",
     "@leanup/git-hooks": "^1.1.0-rc.263",
     "@leanup/stack": "^1.1.0-rc.263",
     "@leanup/stack-preact": "^1.1.0-rc.263",
