@@ -4,7 +4,7 @@ import { createRef, h, JSX, RefObject } from 'preact';
 import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';
 
-import { HistoryController } from './controller';
+import { DataSet, HistoryController } from './controller';
 
 export class HistoryComponent extends ReactComponent<unknown, HistoryController> implements GenericComponent {
   public ctrl: HistoryController = new HistoryController();
@@ -14,6 +14,18 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
   public componentDidMount(): void {
     this.dataSource = this.ctrl.drawChart(this.chart.current as HTMLCanvasElement);
     this.dataSource = this.dataSource.reverse();
+    const dataSourceSum: DataSet = {
+      date: 'Gesamt',
+      right: 0,
+      wrong: 0,
+      sum: 0,
+    };
+    this.dataSource.forEach((data: DataSet) => {
+      dataSourceSum.right += data.right;
+      dataSourceSum.wrong += data.wrong;
+      dataSourceSum.sum += data.sum;
+    });
+    this.dataSource.push(dataSourceSum);
     this.forceUpdate();
   }
 

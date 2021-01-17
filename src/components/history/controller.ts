@@ -14,14 +14,21 @@ interface AufgabeStore {
   date: number;
 }
 
+export interface DataSet {
+  date: string;
+  right: number;
+  wrong: number;
+  sum: number;
+}
+
 export class HistoryController extends AbstractController {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
 
-  public drawChart(ref: HTMLCanvasElement): { date: string; right: number; wrong: number; sum: number }[] {
+  public drawChart(ref: HTMLCanvasElement): DataSet[] {
     const orderedResults = this.getOrderedResults();
     console.log(orderedResults);
     const labels: string[] = [];
-    const dataSource: { date: string; right: number; wrong: number; sum: number }[] = [];
+    const dataSource: DataSet[] = [];
     const datasets: ChartDataSets[] = [
       {
         label: 'Richtig',
