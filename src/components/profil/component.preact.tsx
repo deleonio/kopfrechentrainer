@@ -49,7 +49,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
         >
           <Card>
             <h2>Zahlenbereich einstellen</h2>
-            <p>Gebe hier eine Zahl größer als 0 ein, bis welcher die Rechenaufgaben generiert werden sollen.</p>
+            <p>Gebe hier eine Zahl größer gleich 20 ein, bis welcher die Rechenaufgaben generiert werden sollen.</p>
             {/* <Row>
               <Col>
                 <Form.Item label="Kleinste Zahl" name="minValue">

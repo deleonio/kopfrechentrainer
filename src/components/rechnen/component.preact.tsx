@@ -71,7 +71,7 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
           if (button instanceof HTMLButtonElement) {
             button.removeAttribute('disabled');
           }
-        }, 5000);
+        }, 1500);
       }
     }, 50);
     const progressData = this.ctrl.getDayProgress();
@@ -143,7 +143,7 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
                         if (button instanceof HTMLButtonElement) {
                           button.removeAttribute('disabled');
                         }
-                      }, 5000);
+                      }, 1500);
                     }
                   }, 50);
                   this.forceUpdate();
