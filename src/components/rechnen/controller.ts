@@ -106,11 +106,11 @@ export class RechnenController extends AbstractController {
     const rightWrongSum = this.getRightWrongSum(
       orderedResults[date.getFullYear()][date.getMonth()][date.getDate()] || []
     );
-    if (rightWrongSum.sum === 0) {
-      this.storageService.setItem('watermarks', {
-        dayLimit: 10,
-      });
-    }
+    // if (rightWrongSum.sum === 0) {
+    //   this.storageService.setItem('watermarks', {
+    //     dayLimit: 10,
+    //   });
+    // }
     return {
       ...rightWrongSum,
       limit: watermarks.dayLimit,
