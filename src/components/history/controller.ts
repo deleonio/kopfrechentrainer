@@ -118,6 +118,13 @@ export class HistoryController extends AbstractController {
   public getOrderedResults(): AufgabeStore[][][][] {
     const results = this.storageService.getItem<AufgabeStore[]>('results') || [];
     const orderedResults: AufgabeStore[][][][] = [];
+    results.forEach((result: AufgabeStore, index: number) => {
+      const date: Date = new Date(result.date);
+      if (date.getFullYear() === 2021 && date.getMonth() === 0 && date.getDate() === 7) {
+        results.slice(index, 1);
+      }
+    });
+    this.storageService.setItem('results', results);
     results.forEach((result: AufgabeStore) => {
       const date: Date = new Date(result.date);
       orderedResults[date.getFullYear()] = orderedResults[date.getFullYear()] || [];
