@@ -26,7 +26,6 @@ export class HistoryController extends AbstractController {
 
   public drawChart(ref: HTMLCanvasElement): DataSet[] {
     const orderedResults = this.getOrderedResults();
-    console.log(orderedResults);
     const labels: string[] = [];
     const dataSource: DataSet[] = [];
     const datasets: ChartDataSets[] = [
@@ -116,13 +115,14 @@ export class HistoryController extends AbstractController {
   }
 
   public getOrderedResults(): AufgabeStore[][][][] {
-    const results = this.storageService.getItem<AufgabeStore[]>('results') || [];
+    let results = this.storageService.getItem<AufgabeStore[]>('results') || [];
     const orderedResults: AufgabeStore[][][][] = [];
-    results.forEach((result: AufgabeStore, index: number) => {
+    results = results.filter((result: AufgabeStore) => {
       const date: Date = new Date(result.date);
       if (date.getFullYear() === 2021 && date.getMonth() === 0 && date.getDate() === 7) {
-        results.slice(index, 1);
+        return false;
       }
+      return true;
     });
     this.storageService.setItem('results', results);
     results.forEach((result: AufgabeStore) => {
