@@ -32,6 +32,12 @@ jobs:
           npm run format
           # npm run test
           # npm run coverage
+      - name: SonarCloud Scan
+        # https://github.com/SonarSource/sonarcloud-github-action
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Build
         run: |
           npm run build
