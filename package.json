@@ -24,7 +24,7 @@
     "lint": "eslint {src,tests}/**/*.{html,js,json,jsx,ts,tsx,gql,graphql}"
   },
   "dependencies": {
-    "@ant-design/icons": "4.3.0",
+    "@ant-design/icons": "4.4.0",
     "@leanup/form": "^1.1.0-rc.267",
     "@leanup/lib": "^1.1.0-rc.267",
     "antd": "4.10.2",
