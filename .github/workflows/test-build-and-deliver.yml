@@ -77,6 +77,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Increment version
         run: |
+          git pull
           npm version prerelease --no-git-tag-version
           git add package.json package-lock.json
           git commit -m "Increment version"
