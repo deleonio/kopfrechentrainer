@@ -47,7 +47,7 @@
     "@leanup/stack-preact": "^1.1.0-rc.267",
     "@types/chart.js": "2.9.29",
     "@types/react-router-dom": "5.1.7",
-    "chromedriver": "87.0.5",
+    "chromedriver": "87.0.7",
     "cssnano": "4.1.10",
     "geckodriver": "1.21.1",
     "npm-check-updates": "10.2.5",
