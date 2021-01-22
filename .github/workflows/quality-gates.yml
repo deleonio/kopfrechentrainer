@@ -29,6 +29,7 @@ jobs:
         run: npm run lint:sonar
       - name: Show ESLint result
         run: |
+          prettier --write .reports\eslint.json
           ls -la .reports
           grep -rnw .reports/eslint.json -e 'ruleId'
       - name: SonarCloud Scan
