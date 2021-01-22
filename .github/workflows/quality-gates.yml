@@ -1,0 +1,32 @@
+name: Quality-Gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Test, Build and Deliver
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 14.x
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: |
+          npm run lint
+          npm run format
+          # npm run test
+          # npm run coverage
+      - name: Try Build
+        run: |
+          npm run build
