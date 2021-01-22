@@ -3,6 +3,9 @@ name: Quality-Gates
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches-ignore:
+      - main
 
 jobs:
   quality-gates:
@@ -21,19 +24,21 @@ jobs:
           restore-keys: ${{ runner.os }}-node-
       - name: Install
         run: npm ci
-      - name: Test
-        run: |
-          npm run lint
-          npm run lint:sonar
-          npm run format
-          # npm run test
-          # npm run coverage
+      - name: Generate ESLint report
+        continue-on-error: true
+        run: npm run lint:sonar
       - name: SonarCloud Scan
         # https://github.com/SonarSource/sonarcloud-github-action
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Test
+        run: |
+          # npm run lint
+          npm run format
+          # npm run test
+          # npm run coverage
       - name: Try Build
         run: |
           npm run build
