@@ -33,7 +33,7 @@ jobs:
       - name: Show ESLint result
         run: |
           npx prettier --write ${{env.eslint-report}}
-          ls -la .reports
+          # ls -la .reports
           grep -rnw ${{env.eslint-report}} -e 'ruleId'
       - name: SonarCloud Scan
         # https://github.com/SonarSource/sonarcloud-github-action
