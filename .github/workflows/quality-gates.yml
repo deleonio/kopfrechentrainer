@@ -26,8 +26,9 @@ jobs:
         run: npm ci
       - name: Generate ESLint report
         continue-on-error: true
+        run: npm run lint:sonar
+      - name: Show ESLint result
         run: |
-          npm run lint:sonar
           ls -la .reports
           grep -rnw .reports/eslint.json -e 'ruleId'
       - name: SonarCloud Scan
