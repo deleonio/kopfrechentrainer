@@ -7,6 +7,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  eslint-report: report.json
+
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
@@ -26,12 +29,12 @@ jobs:
         run: npm ci
       - name: Generate ESLint report
         continue-on-error: true
-        run: npm run lint:sonar
+        run: npm run lint -- -f json -o ${{env.eslint-report}}
       - name: Show ESLint result
         run: |
-          prettier --write .reports\eslint.json
+          prettier --write ${{env.eslint-report}}
           ls -la .reports
-          grep -rnw .reports/eslint.json -e 'ruleId'
+          grep -rnw ${{env.eslint-report}} -e 'ruleId'
       - name: SonarCloud Scan
         # https://github.com/SonarSource/sonarcloud-github-action
         uses: SonarSource/sonarcloud-github-action@master
