@@ -94,34 +94,24 @@ export class HistoryController extends AbstractController {
         backgroundColor: 'rgba(100,200,200,.25)',
         borderWidth: 1,
       },
-      {
-        label: 'Falsch',
-        data: [],
-        borderColor: 'rgba(255,125,150,1)',
-        backgroundColor: 'rgba(255,125,150,.25)',
-        borderWidth: 1,
-      },
     ];
     orderedResults.forEach((yearResults: AufgabeStore[][][], year: number) => {
       yearResults.forEach((monthResults: AufgabeStore[][], month: number) => {
         monthResults.forEach((dayResults: AufgabeStore[], day: number) => {
-          const result = this.getRightWrongSum(dayResults);
-          labels.push(`${day}.${month + 1}.${year}`);
-          datasets[0].data?.push(result.right);
-          datasets[1].data?.push(result.wrong);
-          // datasets[0].data?.push(result.right / result.sum);
-          // datasets[1].data?.push(result.wrong / result.sum);
-          dataSource.push({
-            date: `${day}.${month + 1}.${year}`,
-            right: result.right,
-            wrong: result.wrong,
-            sum: result.right + result.wrong,
+          let count = 0;
+          dayResults.forEach((dayResult: AufgabeStore) => {
+            if (dayResult.result === dayResult.answer) {
+              const value = dayResult.values.reduce((a, b) => a + b, 0);
+              count += value / 100;
+            }
           });
+          datasets[0].data?.push(count);
+          labels.push(`${day}.${month + 1}.${year}`);
         });
       });
     });
     new Chart(ref, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: labels,
         datasets: datasets,

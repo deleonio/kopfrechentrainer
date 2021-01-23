@@ -14,7 +14,7 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
 
   public componentDidMount(): void {
     this.dataSource = this.ctrl.drawChart(this.chart.current as HTMLCanvasElement);
-    this.ctrl.drawChartEt(this.chartExt.current as HTMLCanvasElement);
+    this.ctrl.drawChartExt(this.chartExt.current as HTMLCanvasElement);
     this.dataSource = this.dataSource.reverse();
     const dataSourceSum: DataSet = {
       date: 'Gesamt',
