@@ -42,6 +42,11 @@ export class RechnenController extends AbstractController {
       result: this.aufgabe.getErgebnis(),
       date: Date.now(),
     });
+    this.storageService.setItem('aufgabe', {
+      values: this.aufgabe.values,
+      answer: answer,
+      result: this.aufgabe.getErgebnis(),
+    });
     this.storageService.setItem('results', results);
   }
 

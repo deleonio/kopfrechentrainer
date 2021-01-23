@@ -39,7 +39,35 @@ export class AufgabenService {
   public aufgabe: RechenAufgabe;
 
   constructor() {
-    this.aufgabe = this.newAufgabe();
+    const storedAufgabe = this.storageService.getItem<{
+      answer: number | null;
+      sign: string;
+      values: number[];
+    }>('aufgabe');
+    try {
+      if (
+        typeof storedAufgabe === 'object' &&
+        storedAufgabe !== null &&
+        storedAufgabe.answer === null &&
+        typeof storedAufgabe.sign === 'string' &&
+        Array.isArray(storedAufgabe.values)
+      ) {
+        switch (storedAufgabe.sign) {
+          case '+':
+            this.aufgabe = new RechenAufgabeAddition(storedAufgabe.values);
+            break;
+          case '-':
+            this.aufgabe = new RechenAufgabeSubtraktion(storedAufgabe.values);
+            break;
+          default:
+            throw new Error(`Die Rechenart ist nicht definiert.`);
+        }
+      } else {
+        throw new Error(`Keine Aufgabe zwischengespeichert.`);
+      }
+    } catch (error) {
+      this.aufgabe = this.newAufgabe();
+    }
   }
 
   private getRandomInt(max: number) {
@@ -71,6 +99,11 @@ export class AufgabenService {
           ]);
       }
     } while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue);
+    this.storageService.setItem('aufgabe', {
+      answer: null,
+      sign: aufgabe.sign,
+      values: aufgabe.values,
+    });
     return aufgabe;
   }
 
