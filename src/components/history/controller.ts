@@ -116,8 +116,8 @@ export class HistoryController extends AbstractController {
               wrong += value / 100;
             }
           });
-          datasets[0].data?.push(right);
-          datasets[1].data?.push(wrong);
+          datasets[0].data?.push(Math.round(right * 100) / 100);
+          datasets[1].data?.push(Math.round(wrong * 100) / 100);
           labels.push(`${day}.${month + 1}.${year}`);
         });
       });
