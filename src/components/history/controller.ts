@@ -94,18 +94,30 @@ export class HistoryController extends AbstractController {
         backgroundColor: 'rgba(100,200,200,.25)',
         borderWidth: 1,
       },
+      {
+        label: 'Falsch',
+        data: [],
+        borderColor: 'rgba(255,125,150,1)',
+        backgroundColor: 'rgba(255,125,150,.25)',
+        borderWidth: 1,
+      },
     ];
     orderedResults.forEach((yearResults: AufgabeStore[][][], year: number) => {
       yearResults.forEach((monthResults: AufgabeStore[][], month: number) => {
         monthResults.forEach((dayResults: AufgabeStore[], day: number) => {
-          let count = 0;
+          let right = 0;
+          let wrong = 0;
           dayResults.forEach((dayResult: AufgabeStore) => {
             if (dayResult.result === dayResult.answer) {
               const value = dayResult.values.reduce((a, b) => a + b, 0);
-              count += value / 100;
+              right += value / 100;
+            } else {
+              const value = dayResult.values.reduce((a, b) => a + b, 0);
+              wrong += value / 100;
             }
           });
-          datasets[0].data?.push(count);
+          datasets[0].data?.push(right);
+          datasets[1].data?.push(wrong);
           labels.push(`${day}.${month + 1}.${year}`);
         });
       });
