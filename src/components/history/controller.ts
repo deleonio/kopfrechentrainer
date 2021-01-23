@@ -82,6 +82,54 @@ export class HistoryController extends AbstractController {
     });
     return dataSource;
   }
+  public drawChartExt(ref: HTMLCanvasElement): DataSet[] {
+    const orderedResults = this.getOrderedResults();
+    const labels: string[] = [];
+    const dataSource: DataSet[] = [];
+    const datasets: ChartDataSets[] = [
+      {
+        label: 'Richtig',
+        data: [],
+        borderColor: 'rgba(100,200,200,1)',
+        backgroundColor: 'rgba(100,200,200,.25)',
+        borderWidth: 1,
+      },
+    ];
+    orderedResults.forEach((yearResults: AufgabeStore[][][], year: number) => {
+      yearResults.forEach((monthResults: AufgabeStore[][], month: number) => {
+        monthResults.forEach((dayResults: AufgabeStore[], day: number) => {
+          let count = 0;
+          dayResults.forEach((dayResult: AufgabeStore) => {
+            if (dayResult.result === dayResult.answer) {
+              const value = dayResult.values.reduce((a, b) => a + b, 0);
+              count += value / 100;
+            }
+          });
+          datasets[0].data?.push(count);
+          labels.push(`${day}.${month + 1}.${year}`);
+        });
+      });
+    });
+    new Chart(ref, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: datasets,
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
+      },
+    });
+    return dataSource;
+  }
 
   public getRightWrongSum(
     results: AufgabeStore[]

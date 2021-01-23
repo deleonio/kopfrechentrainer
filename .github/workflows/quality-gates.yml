@@ -1,0 +1,52 @@
+name: Quality-Gates
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  eslint-report: report.json
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    name: Quality-Gates
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 14.x
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      - name: Install
+        run: npm ci
+      - name: Generate ESLint report
+        continue-on-error: true
+        run: npm run lint -- -f json -o ${{env.eslint-report}}
+      - name: Show ESLint result
+        run: |
+          npx prettier --write ${{env.eslint-report}}
+          # ls -la .reports
+          grep -rnw ${{env.eslint-report}} -e 'ruleId'
+      - name: SonarCloud Scan
+        # https://github.com/SonarSource/sonarcloud-github-action
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Test
+        run: |
+          # npm run lint
+          npm run format
+          # npm run test
+          # npm run coverage
+      - name: Try Build
+        run: |
+          npm run build

@@ -9,10 +9,12 @@ import { DataSet, HistoryController } from './controller';
 export class HistoryComponent extends ReactComponent<unknown, HistoryController> implements GenericComponent {
   public ctrl: HistoryController = new HistoryController();
   private chart: RefObject<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
+  private chartExt: RefObject<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
   public dataSource: any[] = [];
 
   public componentDidMount(): void {
     this.dataSource = this.ctrl.drawChart(this.chart.current as HTMLCanvasElement);
+    this.ctrl.drawChartExt(this.chartExt.current as HTMLCanvasElement);
     this.dataSource = this.dataSource.reverse();
     const dataSourceSum: DataSet = {
       date: 'Gesamt',
@@ -62,6 +64,9 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
         <h1>Verlauf anschauen</h1>
         <div style={{ height: '500px' }}>
           <canvas ref={this.chart} width="100%" height="100%"></canvas>
+        </div>
+        <div style={{ height: '500px' }}>
+          <canvas ref={this.chartExt} width="100%" height="100%"></canvas>
         </div>
         <hr />
         <Table dataSource={this.dataSource} pagination={{ position: ['topCenter'] }} columns={columns} />
