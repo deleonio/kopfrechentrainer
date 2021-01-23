@@ -8,7 +8,6 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "editor.renderWhitespace": "all",
-  "extensions.autoUpdate": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false,
