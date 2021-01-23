@@ -19,10 +19,10 @@
       height="400px"
     >
       <Scene render="true" visible="true" bboxCenter="0,0,0" bboxSize="-1,-1,-1" pickMode="idBuf" doPickPass="true">
-        <Viewpoint id="front" position="0 0 10" orientation="0 0 0 0"></Viewpoint>
-        <Viewpoint id="top" position=" 0 10 0" orientation="-1.0 0 0 1.5"></Viewpoint>
-        <Viewpoint id="right" position="10 0 0" orientation="0 1.0 0 1.5"></Viewpoint>
-        <Viewpoint id="diagonal" position="10 10 0" orientation="-1.0 1.0 0 1.5"></Viewpoint>
+        <Viewpoint id="front" position="0 0 7" orientation="0 0 0 0"></Viewpoint>
+        <Viewpoint id="top" position=" 0 7 0" orientation="-1.0 0 0 1.5"></Viewpoint>
+        <Viewpoint id="right" position="7 0 0" orientation="0 1.0 0 1.5"></Viewpoint>
+        <Viewpoint id="diagonal" position="7 7 0" orientation="-1.0 1.0 0 1.5"></Viewpoint>
         <Shape>
           <Appearance xmlns="http://www.w3.org/1999/xhtml" sortType="auto" alphaClipThreshold="0.1">
             <Material
@@ -50,10 +50,10 @@
         </Shape>
       </Scene>
     </X3D>
-    <button onclick="document.querySelector('#front').setAttribute('set_bind','true');">Vorne</button>
-    <button onclick="document.querySelector('#top').setAttribute('set_bind','true');">Oben</button>
-    <button onclick="document.querySelector('#right').setAttribute('set_bind','true');">Rechts</button>
-    <button onclick="document.querySelector('#diagonal').setAttribute('set_bind','true');">Diagonal</button>
+    <button onclick="document.querySelector('#front').setAttribute('set_bind','true');">von vorne</button>
+    <button onclick="document.querySelector('#top').setAttribute('set_bind','true');">von oben</button>
+    <button onclick="document.querySelector('#right').setAttribute('set_bind','true');">von rechts</button>
+    <button onclick="document.querySelector('#diagonal').setAttribute('set_bind','true');">diagonal</button>
     <noscript>Diese Webseite erfordert, dass Sie JavaScript aktivieren.</noscript>
   </body>
 </html>

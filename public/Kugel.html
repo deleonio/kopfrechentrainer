@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kugel | KE 7: Einsendeaufgaben</title>
+    <!-- Numbered X3DOM release versions: https://www.x3dom.org/download -->
+    <!-- Developer X3DOM release version: https://www.x3dom.org/download/dev -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://x3dom.org/download/dev/x3dom.css" /> -->
+    <script crossorigin="anonymous" src="https://x3dom.org/download/dev/x3dom-full.js"></script>
+  </head>
+  <body>
+    <h1>Kugel | KE 7: Einsendeaufgaben</h1>
+    <X3D
+      xmlns="http://www.w3.org/1999/xhtml"
+      version="3.3"
+      noNamespaceSchemaLocation="https://www.web3d.org/specifications/x3d-3.3.xsd"
+      width="600px"
+      height="400px"
+    >
+      <Scene render="true" visible="true" bboxCenter="0,0,0" bboxSize="-1,-1,-1" pickMode="idBuf" doPickPass="true">
+        <Viewpoint id="front" position="0 0 5" orientation="0 0 0 0"></Viewpoint>
+        <Shape>
+          <Appearance xmlns="http://www.w3.org/1999/xhtml" sortType="auto" alphaClipThreshold="0.1">
+            <Material diffuseColor="#f00"></Material>
+          </Appearance>
+          <Sphere radius="1" />
+        </Shape>
+      </Scene>
+    </X3D>
+    <button onclick="document.querySelector('Material').setAttribute('diffuseColor','#f00');">Zurücksetzen</button>
+    <button onclick="document.querySelector('Material').setAttribute('diffuseColor','#0f0');">Grün</button>
+    <button onclick="document.querySelector('Material').setAttribute('diffuseColor','#f0a ');">Lila</button>
+    <noscript>Diese Webseite erfordert, dass Sie JavaScript aktivieren.</noscript>
+  </body>
+</html>
