@@ -1,11 +1,12 @@
 name: Quality-Gates
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   types: [opened, synchronize, reopened]
 
 env:
   eslint-report: report.json
@@ -33,8 +34,6 @@ jobs:
       - name: Show ESLint result
         run: |
           npx prettier --write ${{env.eslint-report}}
-          # ls -la .reports
-          grep -rnw ${{env.eslint-report}} -e 'ruleId'
       - name: SonarCloud Scan
         # https://github.com/SonarSource/sonarcloud-github-action
         uses: SonarSource/sonarcloud-github-action@master
