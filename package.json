@@ -42,7 +42,7 @@
     "@leanup/cli-cucumber": "^1.1.0-rc.268",
     "@leanup/cli-preact": "^1.1.0-rc.268",
     "@leanup/cli-pwa": "^1.1.0-rc.268",
-    "@leanup/git-hooks": "^1.1.0-rc.268",
+    "@leanup/git-hooks": "^1.1.0-rc.270",
     "@leanup/stack": "^1.1.0-rc.268",
     "@leanup/stack-preact": "^1.1.0-rc.268",
     "@types/chart.js": "2.9.30",
