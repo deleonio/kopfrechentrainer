@@ -27,7 +27,7 @@
     "@ant-design/icons": "4.4.0",
     "@leanup/form": "^1.1.0-rc.268",
     "@leanup/lib": "^1.1.0-rc.268",
-    "antd": "4.10.3",
+    "antd": "4.12.0",
     "chart.js": "2.9.4",
     "dayjs": "1.10.4",
     "preact": "10.5.11",
