@@ -26,12 +26,6 @@
     "jsxFragmentFactory": "Fragment",
     "resolveJsonModule": true
   },
-  "include": [
-    "generated/**/*",
-    "node_modules/@leanup/**/*",
-    "node_modules/preact/src/index.d.ts",
-    "src/**/*",
-    "tests/**/*"
-  ],
+  "include": ["node_modules/@leanup/**/*", "node_modules/preact/src/index.d.ts", "src/**/*", "tests/**/*"],
   "exclude": ["node_modules/@leanup/**/template/**/*"]
 }
