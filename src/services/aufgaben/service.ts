@@ -98,27 +98,28 @@ export class AufgabenService {
     }>('profil');
   }
 
-  private newAufgabe(): RechenAufgabe {
+  private patchAufgabe(rechenAufgabe: any): RechenAufgabe {
     const profil = this.getProfil();
     let aufgabe: RechenAufgabe;
     do {
-      switch (this.getRandomInt(2)) {
-        case 0:
-          aufgabe = new RechenAufgabeAddition([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
-          break;
-        case 1:
-          aufgabe = new RechenAufgabeSubtraktion([
-            this.getRandomInt(profil.maxValue),
-            this.getRandomInt(profil.maxValue),
-          ]);
-          break;
-        default:
-          aufgabe = new RechenAufgabeMultiplikation([
-            this.getRandomInt(profil.maxValue),
-            this.getRandomInt(profil.maxValue),
-          ]);
-      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
+      aufgabe = new rechenAufgabe([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
     } while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue);
+    return aufgabe;
+  }
+
+  private newAufgabe(): RechenAufgabe {
+    let aufgabe: RechenAufgabe;
+    switch (this.getRandomInt(2)) {
+      case 0:
+        aufgabe = this.patchAufgabe(RechenAufgabeAddition);
+        break;
+      case 1:
+        aufgabe = this.patchAufgabe(RechenAufgabeSubtraktion);
+        break;
+      default:
+        aufgabe = this.patchAufgabe(RechenAufgabeMultiplikation);
+    }
     this.storageService.setItem('aufgabe', {
       answer: null,
       sign: aufgabe.sign,
