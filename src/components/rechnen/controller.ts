@@ -30,8 +30,9 @@ export class RechnenController extends AbstractController {
   }
 
   private updateTextAndColor(): void {
-    this.ergebnisText = this.aufgabe.sign === '+' ? 'Addition' : 'Substraktion';
-    this.ergebnisColor = this.aufgabe.sign === '+' ? '#009' : '#f80';
+    this.ergebnisText =
+      this.aufgabe.sign === '+' ? 'Addition' : this.aufgabe.sign === '-' ? 'Substraktion' : 'Multiplikation';
+    this.ergebnisColor = this.aufgabe.sign === '+' ? '#009' : this.aufgabe.sign === '-' ? '#f80' : '#f0f';
   }
 
   public storeResult(answer: number): void {

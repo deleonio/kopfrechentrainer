@@ -34,6 +34,17 @@ class RechenAufgabeSubtraktion extends RechenAufgabe {
   }
 }
 
+class RechenAufgabeMultiplikation extends RechenAufgabe {
+  public readonly sign = '*';
+  public getErgebnis(): number {
+    let result = this.values[0];
+    for (let i = 1; i < this.values.length; i++) {
+      result *= this.values[i];
+    }
+    return result;
+  }
+}
+
 export class AufgabenService {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
   public aufgabe: RechenAufgabe;
@@ -58,6 +69,9 @@ export class AufgabenService {
             break;
           case '-':
             this.aufgabe = new RechenAufgabeSubtraktion(storedAufgabe.values);
+            break;
+          case '*':
+            this.aufgabe = new RechenAufgabeMultiplikation(storedAufgabe.values);
             break;
           default:
             throw new Error(`Die Rechenart ist nicht definiert.`);
@@ -88,12 +102,18 @@ export class AufgabenService {
     const profil = this.getProfil();
     let aufgabe: RechenAufgabe;
     do {
-      switch (this.getRandomInt(1)) {
+      switch (this.getRandomInt(2)) {
         case 0:
           aufgabe = new RechenAufgabeAddition([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
           break;
-        default:
+        case 1:
           aufgabe = new RechenAufgabeSubtraktion([
+            this.getRandomInt(profil.maxValue),
+            this.getRandomInt(profil.maxValue),
+          ]);
+          break;
+        default:
+          aufgabe = new RechenAufgabeMultiplikation([
             this.getRandomInt(profil.maxValue),
             this.getRandomInt(profil.maxValue),
           ]);
