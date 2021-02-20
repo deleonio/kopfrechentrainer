@@ -35,7 +35,7 @@ class RechenAufgabeSubtraktion extends RechenAufgabe {
 }
 
 class RechenAufgabeMultiplikation extends RechenAufgabe {
-  public readonly sign = '*';
+  public readonly sign = '•';
   public getErgebnis(): number {
     let result = this.values[0];
     for (let i = 1; i < this.values.length; i++) {
