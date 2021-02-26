@@ -26,7 +26,7 @@
   "dependencies": {
     "@ant-design/icons": "4.5.0",
     "@leanup/form": "^1.1.0-rc.299",
-    "@leanup/lib": "^1.1.0-rc.299",
+    "@leanup/lib": "^1.1.0-rc.304",
     "antd": "4.12.3",
     "chart.js": "2.9.4",
     "dayjs": "1.10.4",
