@@ -44,7 +44,7 @@
     "@leanup/cli-pwa": "^1.1.0-rc.299",
     "@leanup/git-hooks": "^1.1.0-rc.299",
     "@leanup/stack": "^1.1.0-rc.299",
-    "@leanup/stack-preact": "^1.1.0-rc.299",
+    "@leanup/stack-preact": "^1.1.0-rc.308",
     "@leanup/stack-webpack": "^1.1.0-rc.299",
     "@types/chart.js": "2.9.30",
     "@types/react-router-dom": "5.1.7",
