@@ -43,7 +43,7 @@
   "devDependencies": {
     "@leanup/cli": "^1.1.0-rc.305",
     "@leanup/cli-cucumber": "^1.1.0-rc.305",
-    "@leanup/cli-preact": "^1.1.0-rc.305",
+    "@leanup/cli-preact": "^1.1.0-rc.309",
     "@leanup/cli-pwa": "^1.1.0-rc.305",
     "@leanup/git-hooks": "^1.1.0-rc.305",
     "@leanup/stack": "^1.1.0-rc.305",
