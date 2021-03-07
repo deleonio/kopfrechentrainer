@@ -1,6 +1,6 @@
 {
-  "name": "@deleonio/kopfrechentrainer",
-  "version": "1.0.0-rc.18",
+  "name": "@o-install/kopfrechentrainer",
+  "version": "1.1.0-rc.305",
   "repository": {
     "type": "git",
     "url": "https://github.com/deleonio/kopfrechentrainer.git"
@@ -18,16 +18,19 @@
     "reinstall": "npm run remove && npm install",
     "remove": "rm -rf node_modules package-lock.json",
     "start": "npm run serve -- --open=chrome",
-    "update": "ncu -t minor -u && npm install",
+    "update": "ncu -t minor -u && npm install && ncu",
     "cucumber": "cross-env NIGHTWATCH_ENV=chrome cucumber-js tests/cucumber/features/**/*.feature --require @babel/register --require cucumber.conf.js --require tests/cucumber/step-definitions --format node_modules/cucumber-pretty --format json:.reports/cucumber/report.json",
     "format": "prettier --check {src,tests}/**",
-    "lint": "eslint {src,tests}/**/*.{html,js,json,jsx,ts,tsx,gql,graphql}"
+    "lint": "eslint {src,tests}/**/*.{html,js,json,jsx,ts,tsx,gql,graphql}",
+    "build:vite": "vite build",
+    "serve:vite": "vite preview",
+    "start:vite": "vite"
   },
   "dependencies": {
     "@ant-design/icons": "4.5.0",
-    "@leanup/form": "^1.1.0-rc.299",
-    "@leanup/lib": "^1.1.0-rc.299",
-    "antd": "4.12.3",
+    "@leanup/form": "^1.1.0-rc.310",
+    "@leanup/lib": "^1.1.0-rc.305",
+    "antd": "4.13.0",
     "chart.js": "2.9.4",
     "dayjs": "1.10.4",
     "preact": "10.5.12",
@@ -35,27 +38,28 @@
     "react-dom": "17.0.1",
     "react-router-dom": "5.2.0",
     "register-service-worker": "1.7.2",
-    "rxjs": "6.6.3"
+    "rxjs": "6.6.6"
   },
   "devDependencies": {
-    "@leanup/cli": "^1.1.0-rc.299",
-    "@leanup/cli-cucumber": "^1.1.0-rc.299",
-    "@leanup/cli-preact": "^1.1.0-rc.299",
-    "@leanup/cli-pwa": "^1.1.0-rc.299",
-    "@leanup/git-hooks": "^1.1.0-rc.299",
-    "@leanup/stack": "^1.1.0-rc.299",
-    "@leanup/stack-preact": "^1.1.0-rc.299",
-    "@leanup/stack-webpack": "^1.1.0-rc.299",
-    "@types/chart.js": "2.9.30",
+    "@leanup/cli": "^1.1.0-rc.305",
+    "@leanup/cli-cucumber": "^1.1.0-rc.305",
+    "@leanup/cli-preact": "^1.1.0-rc.305",
+    "@leanup/cli-pwa": "^1.1.0-rc.305",
+    "@leanup/git-hooks": "^1.1.0-rc.305",
+    "@leanup/stack": "^1.1.0-rc.305",
+    "@leanup/stack-preact": "^1.1.0-rc.305",
+    "@leanup/stack-snowpack": "^1.1.0-rc.305",
+    "@leanup/stack-webpack": "^1.1.0-rc.305",
+    "@types/chart.js": "2.9.31",
     "@types/react-router-dom": "5.1.7",
     "chromedriver": "88.0.0",
     "cssnano": "4.1.10",
     "geckodriver": "1.22.1",
-    "npm-check-updates": "11.1.4",
+    "npm-check-updates": "11.1.9",
     "selenium-server": "3.141.59",
     "tailwindcss": "2.0.3",
-    "typescript": "4.1.5",
-    "workbox-cli": "6.1.0"
+    "typescript": "4.2.2",
+    "workbox-cli": "6.1.1"
   },
   "description": "",
   "husky": {
