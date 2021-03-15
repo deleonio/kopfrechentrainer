@@ -46,7 +46,7 @@
     "@leanup/cli-preact": "^1.1.0-rc.305",
     "@leanup/cli-pwa": "^1.1.0-rc.305",
     "@leanup/git-hooks": "^1.1.0-rc.305",
-    "@leanup/stack": "^1.1.0-rc.305",
+    "@leanup/stack": "^1.1.6",
     "@leanup/stack-preact": "^1.1.0-rc.305",
     "@leanup/stack-snowpack": "^1.1.0-rc.305",
     "@leanup/stack-webpack": "^1.1.0-rc.305",
