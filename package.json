@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "4.5.0",
-    "@leanup/form": "^1.1.0-rc.305",
+    "@leanup/form": "^1.1.9",
     "@leanup/lib": "^1.1.0-rc.305",
     "antd": "4.13.0",
     "chart.js": "2.9.4",
@@ -41,15 +41,15 @@
     "rxjs": "6.6.6"
   },
   "devDependencies": {
-    "@leanup/cli": "^1.1.0-rc.305",
+    "@leanup/cli": "^1.1.9",
     "@leanup/cli-cucumber": "^1.1.0-rc.305",
     "@leanup/cli-preact": "^1.1.0-rc.305",
     "@leanup/cli-pwa": "^1.1.0-rc.305",
     "@leanup/git-hooks": "^1.1.0-rc.305",
-    "@leanup/stack": "^1.1.0-rc.305",
+    "@leanup/stack": "^1.1.9",
     "@leanup/stack-preact": "^1.1.0-rc.305",
     "@leanup/stack-snowpack": "^1.1.0-rc.305",
-    "@leanup/stack-webpack": "^1.1.0-rc.305",
+    "@leanup/stack-webpack": "^1.1.9",
     "@types/chart.js": "2.9.31",
     "@types/react-router-dom": "5.1.7",
     "chromedriver": "88.0.0",
