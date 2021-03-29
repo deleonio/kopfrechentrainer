@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "4.5.0",
-    "@leanup/form": "^1.1.0-rc.305",
+    "@leanup/form": "^1.1.9",
     "@leanup/lib": "^1.1.0-rc.305",
     "antd": "4.13.0",
     "chart.js": "2.9.4",
@@ -41,12 +41,12 @@
     "rxjs": "6.6.6"
   },
   "devDependencies": {
-    "@leanup/cli": "^1.1.0-rc.305",
+    "@leanup/cli": "^1.1.9",
     "@leanup/cli-cucumber": "^1.1.0-rc.305",
     "@leanup/cli-preact": "^1.1.0-rc.305",
     "@leanup/cli-pwa": "^1.1.0-rc.305",
     "@leanup/git-hooks": "^1.1.0-rc.305",
-    "@leanup/stack": "^1.1.0-rc.305",
+    "@leanup/stack": "^1.1.9",
     "@leanup/stack-preact": "^1.1.0-rc.305",
     "@leanup/stack-snowpack": "^1.1.0-rc.305",
     "@leanup/stack-webpack": "^1.1.0-rc.305",
@@ -57,7 +57,7 @@
     "geckodriver": "1.22.1",
     "npm-check-updates": "11.1.9",
     "selenium-server": "3.141.59",
-    "tailwindcss": "2.0.3",
+    "tailwindcss": "2.0.4",
     "typescript": "4.2.2",
     "workbox-cli": "6.1.1"
   },
