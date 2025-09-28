@@ -1,7 +1,12 @@
 {
   "profil": {
     "minValue": 0,
-    "maxValue": 20
+    "maxValue": 20,
+    "operations": {
+      "addition": true,
+      "subtraction": true,
+      "multiplication": true
+    }
   },
   "results": [],
   "watermarks": {

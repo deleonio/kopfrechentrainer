@@ -35,7 +35,7 @@ class RechenAufgabeSubtraktion extends RechenAufgabe {
 }
 
 class RechenAufgabeMultiplikation extends RechenAufgabe {
-  public readonly sign = '•';
+  public readonly sign = '×';
   public getErgebnis(): number {
     let result = this.values[0];
     for (let i = 1; i < this.values.length; i++) {
@@ -43,6 +43,15 @@ class RechenAufgabeMultiplikation extends RechenAufgabe {
     }
     return result;
   }
+}
+
+type RechenAufgabeKonstruktor = new (values: number[]) => RechenAufgabe;
+type OperationKey = 'addition' | 'subtraction' | 'multiplication';
+
+interface ProfilSettings {
+  maxValue: number;
+  minValue: number;
+  operations: Record<OperationKey, boolean>;
 }
 
 export class AufgabenService {
@@ -71,6 +80,8 @@ export class AufgabenService {
             this.aufgabe = new RechenAufgabeSubtraktion(storedAufgabe.values);
             break;
           case '*':
+          case '×':
+          case '•':
             this.aufgabe = new RechenAufgabeMultiplikation(storedAufgabe.values);
             break;
           default:
@@ -88,38 +99,58 @@ export class AufgabenService {
     return Math.floor(Math.random() * Math.floor(max + 1));
   }
 
-  private getProfil(): {
-    maxValue: number;
-    minValue: number;
-  } {
-    return this.storageService.getItem<{
+  private getProfil(): ProfilSettings {
+    const profil = this.storageService.getItem<{
       maxValue: number;
       minValue: number;
+      operations?: Partial<Record<OperationKey, boolean>>;
     }>('profil');
+
+    const operations: Record<OperationKey, boolean> = {
+      addition: profil.operations?.addition !== false,
+      subtraction: profil.operations?.subtraction !== false,
+      multiplication: profil.operations?.multiplication !== false,
+    };
+
+    if (!operations.addition && !operations.subtraction && !operations.multiplication) {
+      operations.addition = true;
+    }
+
+    return {
+      maxValue: profil.maxValue,
+      minValue: profil.minValue,
+      operations,
+    };
   }
 
-  private patchAufgabe(rechenAufgabe: any): RechenAufgabe {
-    const profil = this.getProfil();
+  private patchAufgabe(
+    RechenAufgabeClass: RechenAufgabeKonstruktor,
+    profil: ProfilSettings
+  ): RechenAufgabe {
     let aufgabe: RechenAufgabe;
     do {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-      aufgabe = new rechenAufgabe([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
+      aufgabe = new RechenAufgabeClass([
+        this.getRandomInt(profil.maxValue),
+        this.getRandomInt(profil.maxValue),
+      ]);
     } while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue);
     return aufgabe;
   }
 
   private newAufgabe(): RechenAufgabe {
-    let aufgabe: RechenAufgabe;
-    switch (this.getRandomInt(2)) {
-      case 0:
-        aufgabe = this.patchAufgabe(RechenAufgabeAddition);
-        break;
-      case 1:
-        aufgabe = this.patchAufgabe(RechenAufgabeSubtraktion);
-        break;
-      default:
-        aufgabe = this.patchAufgabe(RechenAufgabeMultiplikation);
-    }
+    const profil = this.getProfil();
+    const constructors: Record<OperationKey, RechenAufgabeKonstruktor> = {
+      addition: RechenAufgabeAddition,
+      subtraction: RechenAufgabeSubtraktion,
+      multiplication: RechenAufgabeMultiplikation,
+    };
+    const enabledConstructors = (Object.keys(profil.operations) as OperationKey[])
+      .filter((key) => profil.operations[key])
+      .map((key) => constructors[key]);
+
+    const randomIndex = this.getRandomInt(enabledConstructors.length - 1);
+    const SelectedConstructor = enabledConstructors[randomIndex];
+    const aufgabe = this.patchAufgabe(SelectedConstructor, profil);
     this.storageService.setItem('aufgabe', {
       answer: null,
       sign: aufgabe.sign,
