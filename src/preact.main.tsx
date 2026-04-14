@@ -2,6 +2,7 @@ import { h, render, Fragment } from 'preact';
 
 import { DI } from '@leanup/lib/helpers/injector';
 
+import './style.less';
 import { AppComponent } from './components/app/component.preact';
 import { PwaUpdatePrompt } from './components/pwa-update/component.preact';
 import './shares/constant';
