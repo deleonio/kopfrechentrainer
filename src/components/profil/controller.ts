@@ -104,6 +104,10 @@ export class ProfilController extends AbstractController {
     });
   }
 
+  public setDifficulty(difficulty: number): void {
+    this.setDifficultyRange(difficulty, difficulty);
+  }
+
   public setDayLimit(dayLimit: number): void {
     dayLimit = Math.floor(dayLimit);
     if (10 <= dayLimit) {
