@@ -71,7 +71,7 @@ jobs:
           clean: true
 
   deploy-pr-preview:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     needs: build
     runs-on: ubuntu-latest
     name: Deploy PR preview to GitHub Pages
