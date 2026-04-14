@@ -66,11 +66,8 @@ export class ProfilController extends AbstractController {
     }
   }
 
-  public clearStore(): void {
-    this.storageService.removeItem('results');
-    window.location.href = '#/';
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
+  public deleteProfile(): void {
+    this.storageService.deleteActiveProfile();
+    window.location.href = '#/start';
   }
 }

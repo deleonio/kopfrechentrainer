@@ -57,6 +57,10 @@ export class AufgabenService {
   public aufgabe: RechenAufgabe;
 
   constructor() {
+    if (!this.storageService.hasActiveProfile()) {
+      this.aufgabe = new RechenAufgabeAddition([0, 0]);
+      return;
+    }
     const storedAufgabe = this.storageService.getItem<{
       answer: number | null;
       sign: string;
@@ -105,11 +109,17 @@ export class AufgabenService {
     minValue: number;
     operators?: string[];
   } {
-    return this.storageService.getItem<{
-      maxValue: number;
-      minValue: number;
-      operators?: string[];
-    }>('profil');
+    return (
+      this.storageService.getItem<{
+        maxValue: number;
+        minValue: number;
+        operators?: string[];
+      }>('profil') || {
+        minValue: 0,
+        maxValue: 20,
+        operators: ['+', '-', '•', ':'],
+      }
+    );
   }
 
   private getEnabledOperators(): string[] {
@@ -182,6 +192,9 @@ export class AufgabenService {
   }
 
   public createAufgabe(): RechenAufgabe {
+    if (!this.storageService.hasActiveProfile()) {
+      return this.aufgabe;
+    }
     if (this.aufgabe.result !== null) {
       this.aufgabe = this.newAufgabe();
     }

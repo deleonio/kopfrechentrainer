@@ -21,13 +21,13 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
     return (
       <div>
         <Modal
-          title="Speicher bereinigen"
+          title="Profil löschen"
           visible={this.isModalVisible}
           onOk={() => {
             this.isModalVisible = false;
-            this.ctrl.clearStore();
+            this.ctrl.deleteProfile();
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            message.success('Speicher wurden bereinigt.');
+            message.success('Profil wurde gelöscht.');
             this.forceUpdate();
           }}
           onCancel={() => {
@@ -37,7 +37,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           okText="Ja"
           cancelText="Nein"
         >
-          <p>Möchtest Du wirklich den gesamten Speicherstand löschen?</p>
+          <p>Möchtest Du wirklich dieses Profil löschen?</p>
         </Modal>
         <h1>Profil einstellen</h1>
         <Form
@@ -155,8 +155,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           </Card>
           <br />
           <Card>
-            <h2>Speicher bereinigen</h2>
-            <p>Sollen alle Einstellungen und Ergebnisse gelöscht werden, dann klicke auf Zurücksetzen.</p>
+            <h2>Profil löschen</h2>
+            <p>Hier kannst Du das aktuelle Profil mit allen Einstellungen und Ergebnissen löschen.</p>
             <Button
               type="dashed"
               size="large"
@@ -165,7 +165,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                 this.forceUpdate();
               }}
             >
-              Zurücksetzen
+              Profil löschen
             </Button>
           </Card>
         </Form>
