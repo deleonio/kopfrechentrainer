@@ -141,7 +141,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     max={5}
                     step={1}
                     marks={{ 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' }}
-                    onChange={(difficulty) => {
+                    onAfterChange={(difficulty) => {
                       this.ctrl.setDifficulty(difficulty as number);
                       // eslint-disable-next-line @typescript-eslint/no-floating-promises
                       message.success('Schwierigkeitsstufe wurde gespeichert.');
