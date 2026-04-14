@@ -46,7 +46,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
             maxValue: this.ctrl.maxValue,
             dayLimit: this.ctrl.dayLimit,
             operators: this.ctrl.operators,
-            difficultyLevel: this.ctrl.difficultyLevel,
+            difficultyMin: this.ctrl.difficultyMin,
+            difficultyMax: this.ctrl.difficultyMax,
           }}
           noValidate={true}
         >
@@ -131,20 +132,38 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           <br />
           <Card>
             <h2>Schwierigkeitsstufe</h2>
-            <p>Wähle eine Stufe von 1 (leicht) bis 5 (schwer).</p>
+            <p>Wähle einen Bereich von 1 (leicht) bis 5 (schwer).</p>
             <Row>
               <Col>
-                <Form.Item label="Stufe" name="difficultyLevel">
+                <Form.Item label="Von" name="difficultyMin">
                   <InputNumber
                     type="number"
                     required={true}
                     min={1}
                     max={5}
-                    onChange={(difficultyLevel) => {
-                      if (typeof difficultyLevel === 'number') {
-                        this.ctrl.setDifficultyLevel(difficultyLevel);
+                    onChange={(difficultyMin) => {
+                      if (typeof difficultyMin === 'number') {
+                        this.ctrl.setDifficultyRange(difficultyMin, this.ctrl.difficultyMax);
                         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                        message.success('Schwierigkeitsstufe wurde gespeichert.');
+                        message.success('Schwierigkeitsbereich wurde gespeichert.');
+                      }
+                      this.forceUpdate();
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col style={{ marginLeft: '1em' }}>
+                <Form.Item label="Bis" name="difficultyMax">
+                  <InputNumber
+                    type="number"
+                    required={true}
+                    min={1}
+                    max={5}
+                    onChange={(difficultyMax) => {
+                      if (typeof difficultyMax === 'number') {
+                        this.ctrl.setDifficultyRange(this.ctrl.difficultyMin, difficultyMax);
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.success('Schwierigkeitsbereich wurde gespeichert.');
                       }
                       this.forceUpdate();
                     }}

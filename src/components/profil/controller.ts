@@ -10,7 +10,8 @@ export class ProfilController extends AbstractController {
   public minValue: number;
   public dayLimit: number;
   public operators: string[];
-  public difficultyLevel: number;
+  public difficultyMin: number;
+  public difficultyMax: number;
 
   public constructor() {
     super();
@@ -19,15 +20,28 @@ export class ProfilController extends AbstractController {
       minValue: number;
       operators?: string[];
       difficultyLevel?: number;
+      difficultyMin?: number;
+      difficultyMax?: number;
     }>('profil');
     this.maxValue = profil.maxValue;
     this.minValue = profil.minValue;
     this.operators =
       Array.isArray(profil.operators) && profil.operators.length > 0 ? profil.operators : ['+', '-', '•', ':'];
-    this.difficultyLevel =
+    const legacyDifficultyLevel =
       typeof profil.difficultyLevel === 'number' && 1 <= profil.difficultyLevel && profil.difficultyLevel <= 5
         ? Math.floor(profil.difficultyLevel)
         : 1;
+    this.difficultyMin =
+      typeof profil.difficultyMin === 'number' && 1 <= profil.difficultyMin && profil.difficultyMin <= 5
+        ? Math.floor(profil.difficultyMin)
+        : legacyDifficultyLevel;
+    this.difficultyMax =
+      typeof profil.difficultyMax === 'number' && 1 <= profil.difficultyMax && profil.difficultyMax <= 5
+        ? Math.floor(profil.difficultyMax)
+        : legacyDifficultyLevel;
+    if (this.difficultyMin > this.difficultyMax) {
+      this.difficultyMax = this.difficultyMin;
+    }
 
     const watermarks = this.storageService.getItem<{
       dayLimit: number;
@@ -45,7 +59,8 @@ export class ProfilController extends AbstractController {
         minValue: minValue,
         maxValue: maxValue,
         operators: this.operators,
-        difficultyLevel: this.difficultyLevel,
+        difficultyMin: this.difficultyMin,
+        difficultyMax: this.difficultyMax,
       });
     }
   }
@@ -60,22 +75,32 @@ export class ProfilController extends AbstractController {
       minValue: this.minValue,
       maxValue: this.maxValue,
       operators: this.operators,
-      difficultyLevel: this.difficultyLevel,
+      difficultyMin: this.difficultyMin,
+      difficultyMax: this.difficultyMax,
     });
     return true;
   }
 
-  public setDifficultyLevel(difficultyLevel: number): void {
-    difficultyLevel = Math.floor(difficultyLevel);
-    if (difficultyLevel < 1 || difficultyLevel > 5) {
+  public setDifficultyRange(difficultyMin: number, difficultyMax: number): void {
+    difficultyMin = Math.floor(difficultyMin);
+    difficultyMax = Math.floor(difficultyMax);
+    if (
+      difficultyMin < 1 ||
+      difficultyMin > 5 ||
+      difficultyMax < 1 ||
+      difficultyMax > 5 ||
+      difficultyMin > difficultyMax
+    ) {
       return;
     }
-    this.difficultyLevel = difficultyLevel;
+    this.difficultyMin = difficultyMin;
+    this.difficultyMax = difficultyMax;
     this.storageService.setItem('profil', {
       minValue: this.minValue,
       maxValue: this.maxValue,
       operators: this.operators,
-      difficultyLevel: this.difficultyLevel,
+      difficultyMin: this.difficultyMin,
+      difficultyMax: this.difficultyMax,
     });
   }
 

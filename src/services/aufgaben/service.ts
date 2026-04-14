@@ -113,6 +113,8 @@ export class AufgabenService {
     minValue: number;
     operators?: string[];
     difficultyLevel?: number;
+    difficultyMin?: number;
+    difficultyMax?: number;
   } {
     return (
       this.storageService.getItem<{
@@ -120,11 +122,15 @@ export class AufgabenService {
         minValue: number;
         operators?: string[];
         difficultyLevel?: number;
+        difficultyMin?: number;
+        difficultyMax?: number;
       }>('profil') || {
         minValue: 0,
         maxValue: 20,
         operators: ['+', '-', '•', ':'],
         difficultyLevel: 1,
+        difficultyMin: 1,
+        difficultyMax: 1,
       }
     );
   }
@@ -138,7 +144,10 @@ export class AufgabenService {
     minQuotient: number;
   } {
     const profil = this.getProfil();
-    const level = Math.min(5, Math.max(1, Math.floor(profil.difficultyLevel || 1)));
+    const legacyLevel = Math.min(5, Math.max(1, Math.floor(profil.difficultyLevel || 1)));
+    const minLevel = Math.min(5, Math.max(1, Math.floor(profil.difficultyMin || legacyLevel)));
+    const maxLevel = Math.min(5, Math.max(minLevel, Math.floor(profil.difficultyMax || legacyLevel)));
+    const level = this.getRandomIntBetween(minLevel, maxLevel);
     const levelFactors = [0.35, 0.5, 0.7, 0.85, 1];
     const valueMax = Math.max(10, Math.floor(profil.maxValue * levelFactors[level - 1]));
     return {

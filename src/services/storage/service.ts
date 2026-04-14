@@ -118,7 +118,8 @@ export class StorageService {
         minValue: 0,
         maxValue: 20,
         operators: ['+', '-', '•', ':'],
-        difficultyLevel: 1,
+        difficultyMin: 1,
+        difficultyMax: 1,
       },
       results: [],
       watermarks: {
