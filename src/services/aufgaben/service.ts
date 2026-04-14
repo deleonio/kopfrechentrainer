@@ -103,11 +103,23 @@ export class AufgabenService {
   private getProfil(): {
     maxValue: number;
     minValue: number;
+    operators?: string[];
   } {
     return this.storageService.getItem<{
       maxValue: number;
       minValue: number;
+      operators?: string[];
     }>('profil');
+  }
+
+  private getEnabledOperators(): string[] {
+    const profil = this.getProfil();
+    const allowedOperators = ['+', '-', '•', ':'];
+    const selectedOperators =
+      Array.isArray(profil.operators) && profil.operators.length > 0
+        ? profil.operators.filter((operator) => allowedOperators.includes(operator))
+        : allowedOperators;
+    return selectedOperators.length > 0 ? selectedOperators : ['+'];
   }
 
   private patchAufgabe(rechenAufgabe: any): RechenAufgabe {
@@ -143,18 +155,23 @@ export class AufgabenService {
 
   private newAufgabe(): RechenAufgabe {
     let aufgabe: RechenAufgabe;
-    switch (this.getRandomInt(3)) {
-      case 0:
+    const enabledOperators = this.getEnabledOperators();
+    const selectedOperator = enabledOperators[this.getRandomInt(enabledOperators.length - 1)];
+    switch (selectedOperator) {
+      case '+':
         aufgabe = this.patchAufgabe(RechenAufgabeAddition);
         break;
-      case 1:
+      case '-':
         aufgabe = this.patchAufgabe(RechenAufgabeSubtraktion);
         break;
-      case 2:
+      case '•':
         aufgabe = this.patchAufgabe(RechenAufgabeMultiplikation);
         break;
-      default:
+      case ':':
         aufgabe = this.patchDivisionAufgabe();
+        break;
+      default:
+        aufgabe = this.patchAufgabe(RechenAufgabeAddition);
     }
     this.storageService.setItem('aufgabe', {
       answer: null,

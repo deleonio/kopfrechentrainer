@@ -1,5 +1,6 @@
 import { Card, Form, message, Row } from 'antd';
 import Button from 'antd/es/button';
+import Checkbox from 'antd/es/checkbox';
 import Col from 'antd/es/grid/col';
 import InputNumber from 'antd/es/input-number';
 import Modal from 'antd/lib/modal/Modal';
@@ -44,6 +45,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
             minValue: this.ctrl.minValue,
             maxValue: this.ctrl.maxValue,
             dayLimit: this.ctrl.dayLimit,
+            operators: this.ctrl.operators,
           }}
           noValidate={true}
         >
@@ -87,6 +89,36 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                           // eslint-disable-next-line @typescript-eslint/no-floating-promises
                           message.success('Größte Zahl wurden gespeichert.');
                         }, 1000);
+                      }
+                      this.forceUpdate();
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <br />
+          <Card>
+            <h2>Rechenarten einstellen</h2>
+            <p>Wähle aus, welche Rechenarten in den Aufgaben vorkommen sollen.</p>
+            <Row>
+              <Col>
+                <Form.Item label="Rechenarten" name="operators">
+                  <Checkbox.Group
+                    options={[
+                      { label: 'Addition (+)', value: '+' },
+                      { label: 'Subtraktion (-)', value: '-' },
+                      { label: 'Multiplikation (•)', value: '•' },
+                      { label: 'Division (:)', value: ':' },
+                    ]}
+                    onChange={(operators) => {
+                      const wasSaved = this.ctrl.setOperators(operators as string[]);
+                      if (wasSaved) {
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.success('Rechenarten wurden gespeichert.');
+                      } else {
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.error('Bitte mindestens eine Rechenart auswählen.');
                       }
                       this.forceUpdate();
                     }}
