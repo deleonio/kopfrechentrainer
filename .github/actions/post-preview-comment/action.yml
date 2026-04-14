@@ -1,0 +1,43 @@
+name: Post Preview Comment
+description: Find or create a comment with the preview URL on a PR
+
+inputs:
+  slug:
+    description: The slug/subdirectory for the PR preview (e.g. pr-42)
+    required: true
+  commit-sha:
+    description: The commit SHA to deploy under (e.g. abc1234...)
+    required: true
+  repository-owner:
+    description: The repository owner username
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Find comment
+      uses: peter-evans/find-comment@v3
+      id: fc
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: 'Open Preview'
+
+    - name: Create or update comment
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          ## 🚀 Preview Deployed
+
+          | | |
+          |---|---|
+          | **Preview URL** | [🔗 Open Preview](https://${{ inputs.repository-owner }}.github.io/${{ github.event.repository.name }}/${{ inputs.slug }}/${{ inputs.commit-sha }}/) |
+          | **Slug** | `${{ inputs.slug }}` |
+          | **Commit** | `${{ inputs.commit-sha }}` |
+
+          **Access with QR Code:**
+
+          ![QR Code](https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://${{ inputs.repository-owner }}.github.io/${{ github.event.repository.name }}/${{ inputs.slug }}/${{ inputs.commit-sha }}/)
+        edit-mode: replace
