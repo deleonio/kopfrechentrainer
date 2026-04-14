@@ -17,8 +17,8 @@ import { StorageService } from '../../services/storage/service';
 import { AppController } from './controller';
 
 const APP_METADATE = {
-  author: 'deleonio',
-  homepage: 'https://github.com/deleonio/kopfrechentrainer',
+  author: __APP_AUTHOR__,
+  homepage: __APP_HOMEPAGE__,
   name: __APP_NAME__,
   version: __APP_VERSION__,
 };

@@ -5,6 +5,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8')) as {
   version: string;
   name: string;
+  author?: string;
+  homepage?: string;
   repository?: { url: string };
 };
 const commitSha = process.env.GITHUB_SHA || process.env.CI_COMMIT_SHA || 'dev';
@@ -33,32 +35,32 @@ export default defineConfig({
         background_color: '#ddd',
         icons: [
           {
-            src: 'assets/christmas.png',
+            src: 'assets/pwa.icon.png',
             sizes: '96x96',
             type: 'image/png',
           },
           {
-            src: 'assets/christmas.png',
+            src: 'assets/pwa.icon.png',
             sizes: '128x128',
             type: 'image/png',
           },
           {
-            src: 'assets/christmas.png',
+            src: 'assets/pwa.icon.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'assets/christmas.png',
+            src: 'assets/pwa.icon.png',
             sizes: '256x256',
             type: 'image/png',
           },
           {
-            src: 'assets/christmas.png',
+            src: 'assets/pwa.icon.png',
             sizes: '384x384',
             type: 'image/png',
           },
           {
-            src: 'assets/christmas.png',
+            src: 'assets/pwa.icon.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
@@ -132,6 +134,8 @@ export default defineConfig({
     __COMMIT_SHA__: JSON.stringify(commitSha),
     __APP_VERSION__: JSON.stringify(pkg.version),
     __APP_NAME__: JSON.stringify(pkg.name),
+    __APP_AUTHOR__: JSON.stringify(pkg.author ?? ''),
+    __APP_HOMEPAGE__: JSON.stringify(pkg.homepage ?? pkg.repository?.url ?? ''),
   },
 
   // react → preact/compat, damit Ant Design und react-router-dom ohne Änderungen funktionieren
