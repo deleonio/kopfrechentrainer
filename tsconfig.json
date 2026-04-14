@@ -21,7 +21,7 @@
     "importHelpers": true,
     "removeComments": true,
     "strict": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
     "resolveJsonModule": true

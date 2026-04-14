@@ -10,21 +10,21 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "cp -r public dist && cross-env NODE_ENV=production webpack",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite --open",
     "coverage": "cross-env NODE_ENV=test nyc mocha",
     "e2e": "nightwatch",
-    "serve": "cross-env NODE_ENV=development webpack serve --devtool=source-map",
     "test": "cross-env NODE_ENV=test mocha",
     "reinstall": "npm run remove && npm install",
     "remove": "rm -rf node_modules package-lock.json",
-    "start": "npm run serve -- --open=chrome",
     "update": "ncu -t minor -u && npm install && ncu",
     "cucumber": "cross-env NIGHTWATCH_ENV=chrome cucumber-js tests/cucumber/features/**/*.feature --require @babel/register --require cucumber.conf.js --require tests/cucumber/step-definitions --format node_modules/cucumber-pretty --format json:.reports/cucumber/report.json",
     "format": "prettier --check {src,tests}/**",
     "lint": "eslint {src,tests}/**/*.{html,js,json,jsx,ts,tsx,gql,graphql}",
-    "build:vite": "vite build",
-    "serve:vite": "vite preview",
-    "start:vite": "vite"
+    "build:webpack": "cp -r public dist && cross-env NODE_ENV=production webpack",
+    "serve:webpack": "cross-env NODE_ENV=development webpack serve --devtool=source-map"
   },
   "dependencies": {
     "@ant-design/icons": "4.5.0",
@@ -55,11 +55,15 @@
     "chromedriver": "88.0.0",
     "cssnano": "4.1.10",
     "geckodriver": "1.22.1",
+    "less": "^4.6.4",
     "npm-check-updates": "11.3.0",
     "selenium-server": "3.141.59",
     "tailwindcss": "2.0.3",
     "typescript": "4.2.2",
-    "workbox-cli": "6.1.1"
+    "vite": "^7.3.2",
+    "vite-plugin-pwa": "^1.2.0",
+    "workbox-cli": "6.1.1",
+    "workbox-window": "^7.4.0"
   },
   "description": "",
   "husky": {

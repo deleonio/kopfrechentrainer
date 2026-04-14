@@ -16,13 +16,11 @@ import { StartComponent } from '../start/component.preact';
 import { StorageService } from '../../services/storage/service';
 import { AppController } from './controller';
 
-declare const __COMMIT_SHA__: string;
-
 const APP_METADATE = {
-  author: '$$APP_AUTHOR$$',
-  homepage: '$$APP_HOMEPAGE$$',
-  name: '$$APP_NAME$$',
-  version: '$$APP_VERSION$$',
+  author: 'deleonio',
+  homepage: 'https://github.com/deleonio/kopfrechentrainer',
+  name: __APP_NAME__,
+  version: __APP_VERSION__,
 };
 
 export class AppComponent extends ReactComponent<unknown, AppController> implements GenericComponent {
