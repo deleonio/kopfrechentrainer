@@ -34,12 +34,18 @@ export class RechnenController extends AbstractController {
       this.aufgabe.sign === '+'
         ? 'Addition'
         : this.aufgabe.sign === '-'
-          ? 'Substraktion'
-          : this.aufgabe.sign === '•'
-            ? 'Multiplikation'
-            : 'Division';
+        ? 'Substraktion'
+        : this.aufgabe.sign === '•'
+        ? 'Multiplikation'
+        : 'Division';
     this.ergebnisColor =
-      this.aufgabe.sign === '+' ? '#009' : this.aufgabe.sign === '-' ? '#f80' : this.aufgabe.sign === '•' ? '#f0f' : '#0a7';
+      this.aufgabe.sign === '+'
+        ? '#009'
+        : this.aufgabe.sign === '-'
+        ? '#f80'
+        : this.aufgabe.sign === '•'
+        ? '#f0f'
+        : '#0a7';
   }
 
   public storeResult(answer: number): void {
