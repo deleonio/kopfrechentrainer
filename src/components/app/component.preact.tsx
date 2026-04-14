@@ -16,6 +16,8 @@ import { StartComponent } from '../start/component.preact';
 import { StorageService } from '../../services/storage/service';
 import { AppController } from './controller';
 
+declare const __COMMIT_SHA__: string;
+
 const APP_METADATE = {
   author: '$$APP_AUTHOR$$',
   homepage: '$$APP_HOMEPAGE$$',
@@ -85,7 +87,7 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
           </Router>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          © {new Date(Date.now()).getFullYear()} - v{APP_METADATE.version}
+          © {new Date(Date.now()).getFullYear()} - v{APP_METADATE.version} ({__COMMIT_SHA__.slice(0, 7)})
         </Footer>
       </Layout>
     );
