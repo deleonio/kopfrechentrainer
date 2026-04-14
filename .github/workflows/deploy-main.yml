@@ -1,0 +1,94 @@
+name: Deploy main-Branch to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-main-deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 16
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist-main
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist-main
+          path: dist/
+
+      - name: Publish to gh-pages root
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          REMOTE_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
+
+          if git ls-remote --exit-code --heads "${REMOTE_URL}" gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "${REMOTE_URL}" gh-pages
+          else
+            git clone --depth 1 "${REMOTE_URL}" gh-pages
+            cd gh-pages
+            git checkout --orphan gh-pages
+            git rm -rf . >/dev/null 2>&1 || true
+            cd ..
+          fi
+
+          cd gh-pages
+
+          # Backup PR directories
+          mkdir -p .pr-backup
+          if [ -d "pr-"* ]; then
+            find . -maxdepth 1 -type d -name "pr-*" -exec mv {} .pr-backup/ \;
+          fi
+
+          # Remove everything except PR backup
+          rm -rf ./* ./.github ./.gitignore ./.nojekyll 2>/dev/null || true
+
+          # Restore PR directories
+          if [ -d ".pr-backup" ] && [ "$(ls -A .pr-backup)" ]; then
+            mv .pr-backup/pr-* . 2>/dev/null || true
+            rmdir .pr-backup
+          fi
+
+          cp -a ../dist/. ./
+          touch .nojekyll
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "Deploy main (${GITHUB_SHA})"
+            git push origin gh-pages
+          else
+            echo "No changes to deploy."
+          fi

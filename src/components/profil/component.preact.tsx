@@ -1,5 +1,6 @@
 import { Card, Form, message, Row } from 'antd';
 import Button from 'antd/es/button';
+import Checkbox from 'antd/es/checkbox';
 import Col from 'antd/es/grid/col';
 import InputNumber from 'antd/es/input-number';
 import Modal from 'antd/lib/modal/Modal';
@@ -20,13 +21,13 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
     return (
       <div>
         <Modal
-          title="Speicher bereinigen"
+          title="Profil löschen"
           visible={this.isModalVisible}
           onOk={() => {
             this.isModalVisible = false;
-            this.ctrl.clearStore();
+            this.ctrl.deleteProfile();
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            message.success('Speicher wurden bereinigt.');
+            message.success('Profil wurde gelöscht.');
             this.forceUpdate();
           }}
           onCancel={() => {
@@ -36,7 +37,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           okText="Ja"
           cancelText="Nein"
         >
-          <p>Möchtest Du wirklich den gesamten Speicherstand löschen?</p>
+          <p>Möchtest Du wirklich dieses Profil löschen?</p>
         </Modal>
         <h1>Profil einstellen</h1>
         <Form
@@ -44,6 +45,9 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
             minValue: this.ctrl.minValue,
             maxValue: this.ctrl.maxValue,
             dayLimit: this.ctrl.dayLimit,
+            operators: this.ctrl.operators,
+            difficultyMin: this.ctrl.difficultyMin,
+            difficultyMax: this.ctrl.difficultyMax,
           }}
           noValidate={true}
         >
@@ -97,6 +101,79 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           </Card>
           <br />
           <Card>
+            <h2>Rechenarten einstellen</h2>
+            <p>Wähle aus, welche Rechenarten in den Aufgaben vorkommen sollen.</p>
+            <Row>
+              <Col>
+                <Form.Item label="Rechenarten" name="operators">
+                  <Checkbox.Group
+                    options={[
+                      { label: 'Addition (+)', value: '+' },
+                      { label: 'Subtraktion (-)', value: '-' },
+                      { label: 'Multiplikation (•)', value: '•' },
+                      { label: 'Division (:)', value: ':' },
+                    ]}
+                    onChange={(operators) => {
+                      const wasSaved = this.ctrl.setOperators(operators as string[]);
+                      if (wasSaved) {
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.success('Rechenarten wurden gespeichert.');
+                      } else {
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.error('Bitte mindestens eine Rechenart auswählen.');
+                      }
+                      this.forceUpdate();
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <br />
+          <Card>
+            <h2>Schwierigkeitsstufe</h2>
+            <p>Wähle einen Bereich von 1 (leicht) bis 5 (schwer).</p>
+            <Row>
+              <Col>
+                <Form.Item label="Von" name="difficultyMin">
+                  <InputNumber
+                    type="number"
+                    required={true}
+                    min={1}
+                    max={5}
+                    onChange={(difficultyMin) => {
+                      if (typeof difficultyMin === 'number') {
+                        this.ctrl.setDifficultyRange(difficultyMin, this.ctrl.difficultyMax);
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.success('Schwierigkeitsbereich wurde gespeichert.');
+                      }
+                      this.forceUpdate();
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col style={{ marginLeft: '1em' }}>
+                <Form.Item label="Bis" name="difficultyMax">
+                  <InputNumber
+                    type="number"
+                    required={true}
+                    min={1}
+                    max={5}
+                    onChange={(difficultyMax) => {
+                      if (typeof difficultyMax === 'number') {
+                        this.ctrl.setDifficultyRange(this.ctrl.difficultyMin, difficultyMax);
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.success('Schwierigkeitsbereich wurde gespeichert.');
+                      }
+                      this.forceUpdate();
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <br />
+          <Card>
             <h2>Ziele einstellen</h2>
             <p>Stelle hier die Lernziele ein.</p>
             <Row>
@@ -123,8 +200,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           </Card>
           <br />
           <Card>
-            <h2>Speicher bereinigen</h2>
-            <p>Sollen alle Einstellungen und Ergebnisse gelöscht werden, dann klicke auf Zurücksetzen.</p>
+            <h2>Profil löschen</h2>
+            <p>Hier kannst Du das aktuelle Profil mit allen Einstellungen und Ergebnissen löschen.</p>
             <Button
               type="dashed"
               size="large"
@@ -133,7 +210,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                 this.forceUpdate();
               }}
             >
-              Zurücksetzen
+              Profil löschen
             </Button>
           </Card>
         </Form>

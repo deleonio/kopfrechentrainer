@@ -1,0 +1,100 @@
+name: Deploy PR-Preview to GitHub Pages
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: gh-pages-pr-deploy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  SLUG: pr-${{ github.event.pull_request.number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 16
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist-${{ env.SLUG }}-${{ github.event.pull_request.head.sha }}
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist-${{ env.SLUG }}-${{ github.event.pull_request.head.sha }}
+          path: dist/
+
+      - name: Publish Preview to gh-pages subfolder
+        id: deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          SLUG: ${{ env.SLUG }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          SHORT_SHA="${SOURCE_SHA:0:7}"
+          DEPLOY_PATH="${SLUG}/${SHORT_SHA}"
+          echo "short-sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          REMOTE_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
+
+          if git ls-remote --exit-code --heads "${REMOTE_URL}" gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "${REMOTE_URL}" gh-pages
+          else
+            git clone --depth 1 "${REMOTE_URL}" gh-pages
+            cd gh-pages
+            git checkout --orphan gh-pages
+            git rm -rf . >/dev/null 2>&1 || true
+            cd ..
+          fi
+
+          cd gh-pages
+
+          # Commit-spezifischen Unterordner des PRs ersetzen
+          rm -rf "${DEPLOY_PATH}"
+          mkdir -p "${DEPLOY_PATH}"
+          cp -a ../dist/. "${DEPLOY_PATH}/"
+          touch .nojekyll
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "Deploy PR preview '${DEPLOY_PATH}' (${SOURCE_SHA})"
+            git push origin gh-pages
+          else
+            echo "No changes to deploy."
+          fi
+
+      - name: Post Preview Comment
+        uses: ./.github/actions/post-preview-comment
+        with:
+          slug: ${{ env.SLUG }}
+          commit-sha: ${{ steps.deploy.outputs.short-sha }}
+          repository-owner: ${{ github.repository_owner }}

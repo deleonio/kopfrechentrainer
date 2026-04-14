@@ -1,0 +1,56 @@
+name: Cleanup PR-Preview from GitHub Pages
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      pr-number:
+        description: 'PR number to cleanup (manual)'
+        required: false
+        type: string
+
+concurrency:
+  group: gh-pages-pr-deploy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove PR preview from gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ inputs.pr-number || github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          REMOTE_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
+          SLUG="pr-${PR_NUMBER}"
+
+          if ! git ls-remote --exit-code --heads "${REMOTE_URL}" gh-pages >/dev/null 2>&1; then
+            echo "Nothing to clean up - gh-pages branch does not exist"
+            exit 0
+          fi
+
+          git clone --depth 1 --branch gh-pages "${REMOTE_URL}" gh-pages
+          cd gh-pages
+
+          if [ ! -d "${SLUG}" ]; then
+            echo "Nothing to clean up - preview directory not found"
+            exit 0
+          fi
+
+          rm -rf "${SLUG}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "cleanup: remove PR preview '${SLUG}' (PR #${PR_NUMBER} closed)"
+            git push origin gh-pages
+          fi

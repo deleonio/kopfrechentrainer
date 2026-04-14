@@ -1,7 +1,10 @@
 {
   "profil": {
     "minValue": 0,
-    "maxValue": 20
+    "maxValue": 20,
+    "operators": ["+", "-", "•", ":"],
+    "difficultyMin": 1,
+    "difficultyMax": 1
   },
   "results": [],
   "watermarks": {
