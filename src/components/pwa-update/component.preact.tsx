@@ -1,28 +1,30 @@
-import { h } from 'preact';
+import { h, JSX } from 'preact';
 import { useRegisterSW } from 'virtual:pwa-register/preact';
 
 /**
  * Zeigt einen Hinweis an, wenn eine neue App-Version verfügbar ist.
  * Der Nutzer kann die Aktualisierung bestätigen oder ablehnen.
  */
-export function PwaUpdatePrompt() {
+export function PwaUpdatePrompt(): JSX.Element | null {
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     offlineReady: [offlineReady, setOfflineReady],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegistered(r) {
+    onRegisteredSW(_swUrl: string, r: ServiceWorkerRegistration | undefined): void {
       if (r) {
         // Alle 60 Sekunden prüfen, ob ein Update verfügbar ist
-        setInterval(() => r.update(), 60 * 1000);
+        setInterval((): void => {
+          void r.update();
+        }, 60 * 1000);
       }
     },
-    onRegisterError(error) {
+    onRegisterError(error: unknown): void {
       console.error('Service-Worker-Registrierung fehlgeschlagen:', error);
     },
   });
 
-  const close = () => {
+  const close = (): void => {
     setOfflineReady(false);
     setNeedRefresh(false);
   };
@@ -72,7 +74,9 @@ export function PwaUpdatePrompt() {
         </button>
         {needRefresh && (
           <button
-            onClick={() => updateServiceWorker(true)}
+            onClick={(): void => {
+              void updateServiceWorker(true);
+            }}
             style={{
               padding: '4px 12px',
               border: 'none',
