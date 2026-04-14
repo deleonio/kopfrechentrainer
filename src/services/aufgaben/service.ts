@@ -45,6 +45,13 @@ class RechenAufgabeMultiplikation extends RechenAufgabe {
   }
 }
 
+class RechenAufgabeDivision extends RechenAufgabe {
+  public readonly sign = ':';
+  public getErgebnis(): number {
+    return this.values[0] / this.values[1];
+  }
+}
+
 export class AufgabenService {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
   public aufgabe: RechenAufgabe;
@@ -71,7 +78,12 @@ export class AufgabenService {
             this.aufgabe = new RechenAufgabeSubtraktion(storedAufgabe.values);
             break;
           case '*':
+          case '•':
             this.aufgabe = new RechenAufgabeMultiplikation(storedAufgabe.values);
+            break;
+          case ':':
+          case '/':
+            this.aufgabe = new RechenAufgabeDivision(storedAufgabe.values);
             break;
           default:
             throw new Error(`Die Rechenart ist nicht definiert.`);
@@ -108,17 +120,41 @@ export class AufgabenService {
     return aufgabe;
   }
 
+  private patchDivisionAufgabe(): RechenAufgabe {
+    const profil = this.getProfil();
+    let aufgabe: RechenAufgabe | null = null;
+    do {
+      const divisor = this.getRandomInt(profil.maxValue);
+      if (divisor === 0) {
+        continue;
+      }
+      const quotient = this.getRandomInt(profil.maxValue);
+      const dividend = divisor * quotient;
+      aufgabe = new RechenAufgabeDivision([dividend, divisor]);
+    } while (
+      !aufgabe ||
+      !Number.isInteger(aufgabe.getErgebnis()) ||
+      aufgabe.getErgebnis() < profil.minValue ||
+      aufgabe.getErgebnis() > profil.maxValue ||
+      aufgabe.values[0] > profil.maxValue
+    );
+    return aufgabe;
+  }
+
   private newAufgabe(): RechenAufgabe {
     let aufgabe: RechenAufgabe;
-    switch (this.getRandomInt(2)) {
+    switch (this.getRandomInt(3)) {
       case 0:
         aufgabe = this.patchAufgabe(RechenAufgabeAddition);
         break;
       case 1:
         aufgabe = this.patchAufgabe(RechenAufgabeSubtraktion);
         break;
-      default:
+      case 2:
         aufgabe = this.patchAufgabe(RechenAufgabeMultiplikation);
+        break;
+      default:
+        aufgabe = this.patchDivisionAufgabe();
     }
     this.storageService.setItem('aufgabe', {
       answer: null,
