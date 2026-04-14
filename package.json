@@ -1,6 +1,7 @@
 {
   "name": "@o-install/kopfrechentrainer",
   "version": "1.1.0-rc.305",
+  "packageManager": "pnpm@10.33.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/deleonio/kopfrechentrainer.git"
@@ -62,7 +63,6 @@
     "typescript": "4.2.2",
     "vite": "^7.3.2",
     "vite-plugin-pwa": "^1.2.0",
-    "workbox-cli": "6.1.1",
     "workbox-window": "^7.4.0"
   },
   "description": "",
