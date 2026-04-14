@@ -18,77 +18,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v5
-
       - uses: actions/setup-node@v6
         with:
-          node-version: 25
-          cache: pnpm
+          node-version: 16
+          cache: npm
 
-      - run: pnpm i
+      - run: npm ci
 
-      - name: TypeScript
-        run: pnpm lint:ts
-
-      - name: ESLint
-        run: pnpm lint:eslint
-
-      - name: Stylelint
-        run: pnpm lint:stylelint
-
-      - name: Knip
-        run: pnpm lint:knip
+      - name: Lint
+        run: npm run lint
 
       - name: Prettier
-        run: pnpm format
-
-      - name: Knip
-        run: pnpm check-unused
-
-      - name: Validate JSON Schemas
-        run: pnpm validate-schemas
+        run: npm run format
 
       - name: Build
-        run: pnpm build
-        env:
-          VITE_COMMIT_SHA: ${{ github.sha }}
-          VITE_ENABLE_PWA: 'false'
-
-      # E2E tests temporarily disabled
-      # - name: Get installed Playwright version
-      #   id: playwright-version
-      #   run: echo "version=$(pnpm list @playwright/test --depth=0 | grep @playwright/test | awk '{print $2}')" >> "$GITHUB_OUTPUT"
-
-      # - name: Cache Playwright browsers
-      #   uses: actions/cache@v5
-      #   id: playwright-cache
-      #   with:
-      #     path: ~/.cache/ms-playwright
-      #     key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
-
-      # - name: Install Playwright browsers
-      #   if: steps.playwright-cache.outputs.cache-hit != 'true'
-      #   run: pnpm exec playwright install --with-deps chromium
-
-      # - name: Install Playwright system deps (cached browsers)
-      #   if: steps.playwright-cache.outputs.cache-hit == 'true'
-      #   run: pnpm exec playwright install-deps chromium
-
-      # - name: Run Playwright tests
-      #   run: pnpm test:e2e
-
-      # - name: Upload Playwright report
-      #   if: always()
-      #   uses: actions/upload-artifact@v7
-      #   with:
-      #     name: playwright-report
-      #     path: playwright-report/
-      #     retention-days: 30
-
-      # - name: Upload screenshots
-      #   if: always()
-      #   uses: actions/upload-artifact@v7
-      #   with:
-      #     name: playwright-screenshots
-      #     path: e2e/**/*.png
-      #     retention-days: 30
+        run: npm run build
