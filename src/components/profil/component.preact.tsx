@@ -46,6 +46,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
             maxValue: this.ctrl.maxValue,
             dayLimit: this.ctrl.dayLimit,
             operators: this.ctrl.operators,
+            difficultyLevel: this.ctrl.difficultyLevel,
           }}
           noValidate={true}
         >
@@ -119,6 +120,31 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                       } else {
                         // eslint-disable-next-line @typescript-eslint/no-floating-promises
                         message.error('Bitte mindestens eine Rechenart auswählen.');
+                      }
+                      this.forceUpdate();
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+          <br />
+          <Card>
+            <h2>Schwierigkeitsstufe</h2>
+            <p>Wähle eine Stufe von 1 (leicht) bis 5 (schwer).</p>
+            <Row>
+              <Col>
+                <Form.Item label="Stufe" name="difficultyLevel">
+                  <InputNumber
+                    type="number"
+                    required={true}
+                    min={1}
+                    max={5}
+                    onChange={(difficultyLevel) => {
+                      if (typeof difficultyLevel === 'number') {
+                        this.ctrl.setDifficultyLevel(difficultyLevel);
+                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                        message.success('Schwierigkeitsstufe wurde gespeichert.');
                       }
                       this.forceUpdate();
                     }}

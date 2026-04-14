@@ -2,7 +2,8 @@
   "profil": {
     "minValue": 0,
     "maxValue": 20,
-    "operators": ["+", "-", "•", ":"]
+    "operators": ["+", "-", "•", ":"],
+    "difficultyLevel": 1
   },
   "results": [],
   "watermarks": {

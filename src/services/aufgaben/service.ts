@@ -104,22 +104,51 @@ export class AufgabenService {
     return Math.floor(Math.random() * Math.floor(max + 1));
   }
 
+  private getRandomIntBetween(min: number, max: number): number {
+    return min + this.getRandomInt(Math.max(0, max - min));
+  }
+
   private getProfil(): {
     maxValue: number;
     minValue: number;
     operators?: string[];
+    difficultyLevel?: number;
   } {
     return (
       this.storageService.getItem<{
         maxValue: number;
         minValue: number;
         operators?: string[];
+        difficultyLevel?: number;
       }>('profil') || {
         minValue: 0,
         maxValue: 20,
         operators: ['+', '-', '•', ':'],
+        difficultyLevel: 1,
       }
     );
+  }
+
+  private getDifficultySettings(): {
+    level: number;
+    valueMax: number;
+    minOperand: number;
+    minFactor: number;
+    minDivisor: number;
+    minQuotient: number;
+  } {
+    const profil = this.getProfil();
+    const level = Math.min(5, Math.max(1, Math.floor(profil.difficultyLevel || 1)));
+    const levelFactors = [0.35, 0.5, 0.7, 0.85, 1];
+    const valueMax = Math.max(10, Math.floor(profil.maxValue * levelFactors[level - 1]));
+    return {
+      level: level,
+      valueMax: valueMax,
+      minOperand: level <= 2 ? 0 : 1,
+      minFactor: level <= 2 ? 2 : level,
+      minDivisor: Math.max(2, level),
+      minQuotient: Math.max(2, level + 1),
+    };
   }
 
   private getEnabledOperators(): string[] {
@@ -132,25 +161,33 @@ export class AufgabenService {
     return selectedOperators.length > 0 ? selectedOperators : ['+'];
   }
 
-  private patchAufgabe(rechenAufgabe: any): RechenAufgabe {
+  private patchAufgabe(rechenAufgabe: any, operator: '+' | '-' | '•'): RechenAufgabe {
     const profil = this.getProfil();
+    const difficulty = this.getDifficultySettings();
     let aufgabe: RechenAufgabe;
     do {
+      let left = this.getRandomIntBetween(difficulty.minOperand, difficulty.valueMax);
+      let right = this.getRandomIntBetween(difficulty.minOperand, difficulty.valueMax);
+      if (operator === '•') {
+        left = this.getRandomIntBetween(difficulty.minFactor, difficulty.valueMax);
+        right = this.getRandomIntBetween(difficulty.minFactor, difficulty.valueMax);
+      }
+      if ((operator === '+' || operator === '-') && right === 0) {
+        right = Math.max(1, difficulty.minOperand);
+      }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-      aufgabe = new rechenAufgabe([this.getRandomInt(profil.maxValue), this.getRandomInt(profil.maxValue)]);
+      aufgabe = new rechenAufgabe([left, right]);
     } while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue);
     return aufgabe;
   }
 
   private patchDivisionAufgabe(): RechenAufgabe {
     const profil = this.getProfil();
+    const difficulty = this.getDifficultySettings();
     let aufgabe: RechenAufgabe | null = null;
     do {
-      const divisor = this.getRandomInt(profil.maxValue);
-      if (divisor === 0) {
-        continue;
-      }
-      const quotient = this.getRandomInt(profil.maxValue);
+      const divisor = this.getRandomIntBetween(difficulty.minDivisor, difficulty.valueMax);
+      const quotient = this.getRandomIntBetween(difficulty.minQuotient, difficulty.valueMax);
       const dividend = divisor * quotient;
       aufgabe = new RechenAufgabeDivision([dividend, divisor]);
     } while (
@@ -158,7 +195,7 @@ export class AufgabenService {
       !Number.isInteger(aufgabe.getErgebnis()) ||
       aufgabe.getErgebnis() < profil.minValue ||
       aufgabe.getErgebnis() > profil.maxValue ||
-      aufgabe.values[0] > profil.maxValue
+      aufgabe.values[0] > difficulty.valueMax
     );
     return aufgabe;
   }
@@ -169,19 +206,19 @@ export class AufgabenService {
     const selectedOperator = enabledOperators[this.getRandomInt(enabledOperators.length - 1)];
     switch (selectedOperator) {
       case '+':
-        aufgabe = this.patchAufgabe(RechenAufgabeAddition);
+        aufgabe = this.patchAufgabe(RechenAufgabeAddition, '+');
         break;
       case '-':
-        aufgabe = this.patchAufgabe(RechenAufgabeSubtraktion);
+        aufgabe = this.patchAufgabe(RechenAufgabeSubtraktion, '-');
         break;
       case '•':
-        aufgabe = this.patchAufgabe(RechenAufgabeMultiplikation);
+        aufgabe = this.patchAufgabe(RechenAufgabeMultiplikation, '•');
         break;
       case ':':
         aufgabe = this.patchDivisionAufgabe();
         break;
       default:
-        aufgabe = this.patchAufgabe(RechenAufgabeAddition);
+        aufgabe = this.patchAufgabe(RechenAufgabeAddition, '+');
     }
     this.storageService.setItem('aufgabe', {
       answer: null,
