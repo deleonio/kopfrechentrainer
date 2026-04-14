@@ -12,12 +12,26 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout gh-pages
+      - name: Checkout default branch
         uses: actions/checkout@v4
-        with:
-          ref: gh-pages
+
+      - name: Check if gh-pages exists
+        id: gh-pages
+        run: |
+          if git ls-remote --exit-code origin gh-pages >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout gh-pages branch
+        if: steps.gh-pages.outputs.exists == 'true'
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
 
       - name: Remove preview folder
+        if: steps.gh-pages.outputs.exists == 'true'
         id: cleanup
         run: |
           PREVIEW_DIR="previews/pr-${{ github.event.pull_request.number }}"
@@ -29,22 +43,25 @@ jobs:
           fi
 
       - name: Commit and push cleanup
-        if: steps.cleanup.outputs.removed == 'true'
+        if: steps.gh-pages.outputs.exists == 'true' && steps.cleanup.outputs.removed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "chore: cleanup preview for PR #${{ github.event.pull_request.number }}"
-          git push
+          git push origin gh-pages
 
       - name: Comment cleanup status
         uses: actions/github-script@v7
         with:
           script: |
-            const removed = '${{ steps.cleanup.outputs.removed }}' === 'true';
-            const body = removed
-              ? '🧹 GitHub Pages preview cleanup completed.'
-              : 'ℹ️ No GitHub Pages preview folder found to clean up.';
+            const hasPages = '${{ steps.gh-pages.outputs.exists }}' === 'true';
+            const removed = '${{ steps.cleanup.outputs.removed || 'false' }}' === 'true';
+            const body = !hasPages
+              ? 'ℹ️ Kein `gh-pages` Branch vorhanden, es gab nichts aufzuräumen.'
+              : removed
+                ? '🧹 GitHub Pages Preview wurde erfolgreich bereinigt.'
+                : 'ℹ️ Kein Preview-Ordner für diese PR gefunden.';
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
