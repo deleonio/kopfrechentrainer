@@ -1,12 +1,12 @@
-name: Quality-Gates
+name: Quality Gates
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 env:
   eslint-report: report.json
@@ -14,39 +14,34 @@ env:
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
-    name: Quality-Gates
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v4
         with:
-          node-version: 14.x
-      - uses: actions/cache@v2.1.4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
-      - name: Install
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
         run: npm ci
+
       - name: Generate ESLint report
         continue-on-error: true
-        run: npm run lint -- -f json -o ${{env.eslint-report}}
+        run: npm run lint -- -f json -o ${{ env.eslint-report }}
+
       - name: Show ESLint result
-        run: |
-          npx prettier --write ${{env.eslint-report}}
-          # grep -rnw ${{env.eslint-report}} -e 'ruleId'
+        run: npx prettier --write ${{ env.eslint-report }}
+
       - name: SonarCloud Scan
-        # https://github.com/SonarSource/sonarcloud-github-action
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: Test
-        run: |
-          # npm run lint
-          npm run format
-          # npm run test
-          # npm run coverage
-      - name: Try Build
-        run: |
-          npm run build
+
+      - name: Format check
+        run: npm run format
+
+      - name: Build check
+        run: npm run build

@@ -1,94 +1,124 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Test, Build and Deliver
+name: CI and GitHub Pages Deploy
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test, Build and Deliver
+    name: Lint, Format and Build
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v4
         with:
-          node-version: 14.x
-      - uses: actions/cache@v2.1.4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
-      - name: Install
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
         run: npm ci
-      - name: Test
-        run: |
-          npm run lint
-          npm run format
-          # npm run test
-          # npm run coverage
-      - name: SonarCloud Scan
-        # https://github.com/SonarSource/sonarcloud-github-action
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format
+
       - name: Build
-        run: |
-          npm run build
-          mv dist rechnen
-          mkdir dist
-          mv rechnen dist/rechnen
-          ls -la
-      - name: Read package.json
-        id: package
-        run: |
-          content=`cat package.json | tr -d "\n"`
-          echo "::set-output name=json::$content"
-      - name: Git config
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-      - name: Git tag
-        run: |
-          git tag -a v${{fromJson(steps.package.outputs.json).version}} -m "Tag version ${{fromJson(steps.package.outputs.json).version}}"
-          git push --tags
-      - name: Update changelog
-        run: |
-          npm install auto-changelog --no-save
-          # npx auto-changelog
-          # git add CHANGELOG.md
-          # git commit -m "Update changelog"
-          # git push
-      - name: Set up Node.js
-        uses: actions/setup-node@v2.1.5
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 14.x
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@deleonio'
-      - name: Publish
-        run: npm publish --access restricted
+          name: dist
+          path: dist
+
+  deploy-main:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy main to GitHub Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          clean: true
+
+  deploy-pr-preview:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy PR preview to GitHub Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Deploy PR preview
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages
+          target-folder: previews/pr-${{ github.event.pull_request.number }}
+          clean: false
+
+      - name: Comment preview URL
+        uses: actions/github-script@v7
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Increment version
-        run: |
-          git pull
-          npm version prerelease --no-git-tag-version
-          git add package.json package-lock.json
-          git commit -m "Increment version"
-          git push
-      - name: Deliver
-        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+          PREVIEW_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/
         with:
-          ftp-server: ${{ secrets.FTP_HOST }}
-          ftp-username: ${{ secrets.FTP_USERNAME }}
-          ftp-password: ${{ secrets.FTP_PASSWORD }}
-          known-hosts: ${{ secrets.FTP_KNOWN_HOSTS }}
-          local-dir: dist/
-          # server-dir: /apps/rechnen/
-          git-ftp-args: --all
+          script: |
+            const marker = '<!-- gh-pages-preview -->';
+            const body = `${marker}\n✅ Preview deployed: ${process.env.PREVIEW_URL}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find((comment) => comment.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
