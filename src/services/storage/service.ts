@@ -2,6 +2,8 @@ interface INameToValueMap {
   [key: string]: unknown;
 }
 
+import mockStoreData from './mock.json';
+
 interface IProfileEntry {
   name: string;
   data: INameToValueMap;
@@ -159,8 +161,7 @@ export class StorageService {
       }
       this.memoryStorage = this.migrateToProfileStore(<INameToValueMap>JSON.parse(localStorage));
     } catch (error) {
-      const mock = <INameToValueMap>require('./mock.json');
-      this.memoryStorage = this.migrateToProfileStore(mock);
+      this.memoryStorage = this.migrateToProfileStore(<INameToValueMap>mockStoreData);
     }
   }
 
