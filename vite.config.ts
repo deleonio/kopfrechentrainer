@@ -33,8 +33,8 @@ const pwaManifest = {
 const pwaWorkbox = {
   // Alte, veraltete Caches beim Update löschen
   cleanupOutdatedCaches: true,
-  // Neuer Service Worker wartet auf Nutzerbestätigung (kein skipWaiting)
-  skipWaiting: false,
+  // Neuer Service Worker aktiviert sich sofort
+  skipWaiting: true,
   // Neuer SW übernimmt sofort alle Tabs nach Aktivierung
   clientsClaim: true,
   runtimeCaching: [
@@ -76,8 +76,8 @@ export default defineConfig({
   plugins: [
     VitePWA({
       injectRegister: 'auto',
-      // 'prompt' = zeigt dem Nutzer einen Hinweis, wenn eine neue Version verfügbar ist
-      registerType: 'prompt',
+      // autoUpdate reduziert das Risiko, auf einer alten kaputten SW-Version zu bleiben
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'assets/**/*.png'],
       manifest: pwaManifest,
       workbox: pwaWorkbox,

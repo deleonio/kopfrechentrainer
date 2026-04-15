@@ -14,10 +14,21 @@ if (isDev) {
 }
 
 import preactPkg from 'preact/package.json';
-DI.register('Framework', {
-  ...preactPkg,
-  name: 'Preact',
-});
+
+const renderFatalError = (message: string): void => {
+  const htmlDivElement: HTMLDivElement | null = document.querySelector('div#app');
+  if (htmlDivElement instanceof HTMLDivElement) {
+    htmlDivElement.style.display = 'inline';
+    render(
+      <div style={{ padding: '1rem' }}>
+        <h1>Startfehler</h1>
+        <p>Die Anwendung konnte nicht initialisiert werden.</p>
+        <pre style={{ whiteSpace: 'pre-wrap' }}>{message}</pre>
+      </div>,
+      htmlDivElement
+    );
+  }
+};
 
 interface IErrorBoundaryState {
   error: Error | null;
@@ -52,16 +63,27 @@ class AppErrorBoundary extends Component<{ children: ComponentChildren }, IError
   }
 }
 
-const htmlDivElement: HTMLDivElement | null = document.querySelector('div#app');
-if (htmlDivElement instanceof HTMLDivElement) {
-  htmlDivElement.style.display = 'inline';
-  render(
-    <AppErrorBoundary>
-      <Fragment>
-        <AppComponent />
-        <PwaUpdatePrompt />
-      </Fragment>
-    </AppErrorBoundary>,
-    htmlDivElement
-  );
+try {
+  DI.register('Framework', {
+    ...preactPkg,
+    name: 'Preact',
+  });
+
+  const htmlDivElement: HTMLDivElement | null = document.querySelector('div#app');
+  if (htmlDivElement instanceof HTMLDivElement) {
+    htmlDivElement.style.display = 'inline';
+    render(
+      <AppErrorBoundary>
+        <Fragment>
+          <AppComponent />
+          <PwaUpdatePrompt />
+        </Fragment>
+      </AppErrorBoundary>,
+      htmlDivElement
+    );
+  }
+} catch (error) {
+  const message = error instanceof Error ? `${error.message}\n\n${error.stack || ''}` : String(error);
+  console.error('App-Initialisierung fehlgeschlagen:', error);
+  renderFatalError(message);
 }
