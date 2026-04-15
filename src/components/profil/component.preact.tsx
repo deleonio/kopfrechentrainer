@@ -18,7 +18,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
   private timeoutRange: NodeJS.Timeout | undefined;
   private timeoutLimit: NodeJS.Timeout | undefined;
 
-  render(): JSX.Element {
+  public render(): JSX.Element {
     return (
       <div>
         <Modal
