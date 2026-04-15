@@ -1,3 +1,1 @@
-module.exports = {
-  root: true,
-};
+module.exports = require('@leanup/stack/.eslintrc');
