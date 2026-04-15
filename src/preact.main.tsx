@@ -1,4 +1,4 @@
-import { h, render, Fragment, Component, ComponentChildren, ErrorInfo } from 'preact';
+import { h, render, Fragment, Component, ComponentChildren } from 'preact';
 
 import { DI } from '@leanup/lib/helpers/injector';
 
@@ -34,7 +34,7 @@ class AppErrorBoundary extends Component<{ children: ComponentChildren }, IError
     };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  public componentDidCatch(error: Error, errorInfo: unknown): void {
     console.error('Unbehandelter Laufzeitfehler in der App:', error, errorInfo);
   }
 

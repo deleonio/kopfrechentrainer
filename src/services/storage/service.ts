@@ -132,7 +132,7 @@ export class StorageService {
 
   private migrateToProfileStore(legacyStore: INameToValueMap): IProfileStore {
     if ('profiles' in legacyStore && 'activeProfileId' in legacyStore) {
-      const migratedStore = legacyStore as IProfileStore;
+      const migratedStore = legacyStore as unknown as IProfileStore;
       return {
         activeProfileId: migratedStore.activeProfileId,
         profiles: migratedStore.profiles || {},
