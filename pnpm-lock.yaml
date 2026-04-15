@@ -35,6 +35,9 @@ importers:
       react-dom:
         specifier: 17.0.1
         version: 17.0.1(react@17.0.1)
+      react-router:
+        specifier: ^5.2.0
+        version: 5.2.0(react@17.0.1)
       react-router-dom:
         specifier: 5.2.0
         version: 5.2.0(react@17.0.1)
