@@ -8,7 +8,8 @@ import { PwaUpdatePrompt } from './components/pwa-update/component.preact';
 import './shares/constant';
 import './shares/register';
 
-if (import.meta.env.DEV) {
+const isDev = Boolean((import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV);
+if (isDev) {
   import('preact/debug');
 }
 

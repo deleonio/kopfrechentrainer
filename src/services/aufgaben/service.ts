@@ -56,7 +56,7 @@ export class AufgabenService {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
   public aufgabe: RechenAufgabe;
 
-  constructor() {
+  public constructor() {
     if (!this.storageService.hasActiveProfile()) {
       this.aufgabe = new RechenAufgabeAddition([0, 0]);
       return;
