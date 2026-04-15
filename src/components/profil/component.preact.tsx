@@ -18,7 +18,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
   private timeoutRange: NodeJS.Timeout | undefined;
   private timeoutLimit: NodeJS.Timeout | undefined;
 
-  render(): JSX.Element {
+  public render(): JSX.Element {
     return (
       <div>
         <Modal
@@ -141,7 +141,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     max={5}
                     step={1}
                     marks={{ 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' }}
-                    onAfterChange={(difficulty) => {
+                    onAfterChange={(difficulty: number) => {
                       this.ctrl.setDifficulty(difficulty as number);
                       // eslint-disable-next-line @typescript-eslint/no-floating-promises
                       message.success('Schwierigkeitsstufe wurde gespeichert.');

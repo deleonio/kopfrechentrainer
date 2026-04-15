@@ -2,6 +2,8 @@ interface INameToValueMap {
   [key: string]: unknown;
 }
 
+import mockStoreData from './mock.json';
+
 interface IProfileEntry {
   name: string;
   data: INameToValueMap;
@@ -130,7 +132,7 @@ export class StorageService {
 
   private migrateToProfileStore(legacyStore: INameToValueMap): IProfileStore {
     if ('profiles' in legacyStore && 'activeProfileId' in legacyStore) {
-      const migratedStore = legacyStore as IProfileStore;
+      const migratedStore = legacyStore as unknown as IProfileStore;
       return {
         activeProfileId: migratedStore.activeProfileId,
         profiles: migratedStore.profiles || {},
@@ -159,8 +161,7 @@ export class StorageService {
       }
       this.memoryStorage = this.migrateToProfileStore(<INameToValueMap>JSON.parse(localStorage));
     } catch (error) {
-      const mock = <INameToValueMap>require('./mock.json');
-      this.memoryStorage = this.migrateToProfileStore(mock);
+      this.memoryStorage = this.migrateToProfileStore(<INameToValueMap>mockStoreData);
     }
   }
 

@@ -28,3 +28,5 @@ declare module 'virtual:pwa-register/preact' {
     updateServiceWorker: (reloadPage?: boolean) => Promise<void>;
   };
 }
+
+declare module 'preact/debug';

@@ -41,25 +41,25 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
           </a>
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['0']}>
             <Menu.Item key="0">
-              <a href="#start">Start</a>
+              <a href="#/start">Start</a>
             </Menu.Item>
             {hasActiveProfile && (
               <Menu.Item key="1">
-                <a href="#">Rechnen</a>
+                <a href="#/">Rechnen</a>
               </Menu.Item>
             )}
             {hasActiveProfile && (
               <Menu.Item key="2">
-                <a href="#history">Verlauf</a>
+                <a href="#/history">Verlauf</a>
               </Menu.Item>
             )}
             {hasActiveProfile && (
               <Menu.Item key="3">
-                <a href="#profil">Profil</a>
+                <a href="#/profil">Profil</a>
               </Menu.Item>
             )}
             <Menu.Item key="4">
-              <a href="#info">Info</a>
+              <a href="#/info">Info</a>
             </Menu.Item>
           </Menu>
         </Header>

@@ -4,13 +4,12 @@ import Input from 'antd/es/input';
 import List from 'antd/es/list';
 import { h, JSX } from 'preact';
 
-import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';
 import { DI } from '@leanup/lib/helpers/injector';
 
 import { StorageService } from '../../services/storage/service';
 
-export class StartComponent extends ReactComponent<unknown, unknown> implements GenericComponent {
+export class StartComponent extends ReactComponent<unknown, unknown> {
   private readonly storageService: StorageService = DI.get<StorageService>('StorageService');
   private profileName = '';
 
