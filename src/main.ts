@@ -1,2 +1,2 @@
-import './style.less';
 import './preact.main';
+import './style.less';
