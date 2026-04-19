@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
 import { Chart, ChartDataSets } from 'chart.js';
 
 import { AbstractController } from '@leanup/lib/components/generic';

@@ -1,5 +1,5 @@
-import { Card, Form, message, Row } from 'antd';
-import { h, JSX } from 'preact';
+import { Card } from 'antd';
+import { JSX } from 'preact';
 
 import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';

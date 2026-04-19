@@ -5,7 +5,7 @@ import Col from 'antd/es/grid/col';
 import InputNumber from 'antd/es/input-number';
 import Slider from 'antd/es/slider';
 import Modal from 'antd/lib/modal/Modal';
-import { h } from 'preact';
+
 
 import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';
@@ -15,8 +15,8 @@ import { ProfilController } from './controller';
 export class ProfilComponent extends ReactComponent<unknown, ProfilController> implements GenericComponent {
   public readonly ctrl: ProfilController = new ProfilController();
   private isModalVisible = false;
-  private timeoutRange: NodeJS.Timeout | undefined;
-  private timeoutLimit: NodeJS.Timeout | undefined;
+  private timeoutRange: ReturnType<typeof setTimeout> | undefined;
+  private timeoutLimit: ReturnType<typeof setTimeout> | undefined;
 
   render(): JSX.Element {
     return (
@@ -27,7 +27,6 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
           onOk={() => {
             this.isModalVisible = false;
             this.ctrl.deleteProfile();
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             message.success('Profil wurde gelöscht.');
             this.forceUpdate();
           }}
@@ -86,9 +85,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                       if (typeof maxValue === 'number') {
                         this.ctrl.setRange(0, maxValue);
                         // this.ctrl.setRange(this.ctrl.minValue, maxValue);
-                        clearTimeout(this.timeoutRange as NodeJS.Timeout);
+                        clearTimeout(this.timeoutRange as ReturnType<typeof setTimeout>);
                         this.timeoutRange = setTimeout(() => {
-                          // eslint-disable-next-line @typescript-eslint/no-floating-promises
                           message.success('Größte Zahl wurden gespeichert.');
                         }, 1000);
                       }
@@ -116,10 +114,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     onChange={(operators) => {
                       const wasSaved = this.ctrl.setOperators(operators as string[]);
                       if (wasSaved) {
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
                         message.success('Rechenarten wurden gespeichert.');
                       } else {
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
                         message.error('Bitte mindestens eine Rechenart auswählen.');
                       }
                       this.forceUpdate();
@@ -143,7 +139,6 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     marks={{ 1: '1', 2: '2', 3: '3', 4: '4', 5: '5' }}
                     onAfterChange={(difficulty) => {
                       this.ctrl.setDifficulty(difficulty as number);
-                      // eslint-disable-next-line @typescript-eslint/no-floating-promises
                       message.success('Schwierigkeitsstufe wurde gespeichert.');
                       this.forceUpdate();
                     }}
@@ -165,9 +160,8 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
                     onChange={(dayLimit) => {
                       if (typeof dayLimit === 'number') {
                         this.ctrl.setDayLimit(dayLimit);
-                        clearTimeout(this.timeoutLimit as NodeJS.Timeout);
+                        clearTimeout(this.timeoutLimit as ReturnType<typeof setTimeout>);
                         this.timeoutLimit = setTimeout(() => {
-                          // eslint-disable-next-line @typescript-eslint/no-floating-promises
                           message.success('Aufgaben pro Tag wurden gespeichert.');
                         }, 1000);
                       }

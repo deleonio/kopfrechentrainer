@@ -95,7 +95,7 @@ export class AufgabenService {
       } else {
         throw new Error(`Keine Aufgabe zwischengespeichert.`);
       }
-    } catch (error) {
+    } catch {
       this.aufgabe = this.newAufgabe();
     }
   }
@@ -170,7 +170,7 @@ export class AufgabenService {
     return selectedOperators.length > 0 ? selectedOperators : ['+'];
   }
 
-  private patchAufgabe(rechenAufgabe: any, operator: '+' | '-' | '•'): RechenAufgabe {
+  private patchAufgabe(rechenAufgabe: new (values: number[]) => RechenAufgabe, operator: '+' | '-' | '•'): RechenAufgabe {
     const profil = this.getProfil();
     const difficulty = this.getDifficultySettings();
     let aufgabe: RechenAufgabe;
@@ -184,7 +184,6 @@ export class AufgabenService {
       if ((operator === '+' || operator === '-') && right === 0) {
         right = Math.max(1, difficulty.minOperand);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
       aufgabe = new rechenAufgabe([left, right]);
     } while (aufgabe.getErgebnis() < profil.minValue || aufgabe.getErgebnis() > profil.maxValue);
     return aufgabe;
@@ -193,14 +192,13 @@ export class AufgabenService {
   private patchDivisionAufgabe(): RechenAufgabe {
     const profil = this.getProfil();
     const difficulty = this.getDifficultySettings();
-    let aufgabe: RechenAufgabe | null = null;
+    let aufgabe!: RechenAufgabe;
     do {
       const divisor = this.getRandomIntBetween(difficulty.minDivisor, difficulty.valueMax);
       const quotient = this.getRandomIntBetween(difficulty.minQuotient, difficulty.valueMax);
       const dividend = divisor * quotient;
       aufgabe = new RechenAufgabeDivision([dividend, divisor]);
     } while (
-      !aufgabe ||
       !Number.isInteger(aufgabe.getErgebnis()) ||
       aufgabe.getErgebnis() < profil.minValue ||
       aufgabe.getErgebnis() > profil.maxValue ||

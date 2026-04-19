@@ -1,4 +1,4 @@
-import { h, render, Fragment } from 'preact';
+import { render } from 'preact';
 
 import { DI } from '@leanup/lib/helpers/injector';
 
@@ -22,10 +22,10 @@ const htmlDivElement: HTMLDivElement | null = document.querySelector('div#app');
 if (htmlDivElement instanceof HTMLDivElement) {
   htmlDivElement.style.display = 'inline';
   render(
-    <Fragment>
+    <>
       <AppComponent />
       <PwaUpdatePrompt />
-    </Fragment>,
+    </>,
     htmlDivElement
   );
 }

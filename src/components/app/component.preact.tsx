@@ -1,6 +1,6 @@
 import Menu from 'antd/es/menu';
 import Layout, { Content, Footer, Header } from 'antd/lib/layout/layout';
-import { h, JSX } from 'preact';
+import { JSX } from 'preact';
 import { Route, Switch } from 'react-router';
 import { HashRouter as Router } from 'react-router-dom';
 import { DI } from '@leanup/lib/helpers/injector';
@@ -45,7 +45,7 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
             </Menu.Item>
             {hasActiveProfile && (
               <Menu.Item key="1">
-                <a href="#">Rechnen</a>
+                <a href="#rechnen">Rechnen</a>
               </Menu.Item>
             )}
             {hasActiveProfile && (

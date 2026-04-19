@@ -1,5 +1,5 @@
 import { Table } from 'antd';
-import { createRef, h, JSX, RefObject } from 'preact';
+import { createRef, JSX, RefObject } from 'preact';
 
 import { GenericComponent } from '@leanup/lib/components/generic';
 import { ReactComponent } from '@leanup/lib/components/react';
@@ -10,7 +10,7 @@ export class HistoryComponent extends ReactComponent<unknown, HistoryController>
   public ctrl: HistoryController = new HistoryController();
   private chart: RefObject<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
   private chartExt: RefObject<HTMLCanvasElement> = createRef<HTMLCanvasElement>();
-  public dataSource: any[] = [];
+  public dataSource: DataSet[] = [];
 
   public componentDidMount(): void {
     this.dataSource = this.ctrl.drawChart(this.chart.current as HTMLCanvasElement);

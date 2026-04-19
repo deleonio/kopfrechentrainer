@@ -1,4 +1,4 @@
-import { h, JSX } from 'preact';
+import { JSX } from 'preact';
 import { useRegisterSW } from 'virtual:pwa-register/preact';
 
 /**

@@ -7,8 +7,8 @@ import Row from 'antd/es/grid/row';
 import InputNumber from 'antd/es/input-number';
 import Progress from 'antd/es/progress';
 import Modal from 'antd/lib/modal/Modal';
-import { createRef, h, JSX } from 'preact';
-import { KeyboardEventHandler } from 'react';
+import { createRef, JSX } from 'preact';
+import React from 'react';
 
 import { TrophyTwoTone } from '@ant-design/icons';
 import { GenericComponent } from '@leanup/lib/components/generic';
@@ -34,7 +34,7 @@ export class RechnenComponent extends ReactComponent<unknown, RechnenController>
     }, 50);
   }
 
-  private onKeyUp(event: unknown): void {
+  private onKeyUp(event: React.KeyboardEvent<HTMLInputElement>): void {
     const target: HTMLInputElement = event.target as HTMLInputElement;
     const button: HTMLButtonElement = document.querySelector('#pruefen') as HTMLButtonElement;
     if (button instanceof HTMLButtonElement) {
