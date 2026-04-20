@@ -93,6 +93,8 @@ export default defineConfig({
 		__APP_HOMEPAGE__: JSON.stringify(pkg.homepage ?? pkg.repository?.url ?? ''),
 	},
 
+	base: './',
+
 	build: {
 		outDir: 'dist',
 	},
