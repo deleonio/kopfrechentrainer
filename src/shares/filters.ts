@@ -1,7 +1,7 @@
 const CURRENCY_FORMATTER: Intl.NumberFormat = new Intl.NumberFormat('de-DE', {
-  currency: 'EUR',
-  maximumFractionDigits: 2,
-  minimumFractionDigits: 2,
+	currency: 'EUR',
+	maximumFractionDigits: 2,
+	minimumFractionDigits: 2,
 });
 
 /**
@@ -12,19 +12,19 @@ const CURRENCY_FORMATTER: Intl.NumberFormat = new Intl.NumberFormat('de-DE', {
 const DATE_FORMATTER: Intl.DateTimeFormat = new Intl.DateTimeFormat('de-DE');
 
 export class Filters {
-  public static currency(value: number): string {
-    if (isNaN(value) === false && typeof value === 'number') {
-      return CURRENCY_FORMATTER.format(value);
-    } else {
-      throw new Error('Value is not a number!');
-    }
-  }
+	public static currency(value: number): string {
+		if (isNaN(value) === false && typeof value === 'number') {
+			return CURRENCY_FORMATTER.format(value);
+		} else {
+			throw new Error('Value is not a number!');
+		}
+	}
 
-  public static date(value: Date): string {
-    if (value instanceof Date) {
-      return DATE_FORMATTER.format(value);
-    } else {
-      throw new Error('Value is not a date!');
-    }
-  }
+	public static date(value: Date): string {
+		if (value instanceof Date) {
+			return DATE_FORMATTER.format(value);
+		} else {
+			throw new Error('Value is not a date!');
+		}
+	}
 }

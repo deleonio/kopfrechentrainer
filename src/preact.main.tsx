@@ -1,26 +1,31 @@
-import { h, render } from 'preact';
+import { render } from 'preact';
 
 import { DI } from '@leanup/lib/helpers/injector';
 
 import { AppComponent } from './components/app/component.preact';
+import { PwaUpdatePrompt } from './components/pwa-update/component.preact';
+import './shares/constant';
+import './shares/register';
+import './style.less';
 
-// https://github.com/preactjs/preact/blob/master/README.md#debug-mode
-const ENVs = {
-  NODE_ENV: '$$NODE_ENV$$',
-};
-if (ENVs.NODE_ENV === 'development') {
-  require('preact/debug');
+if (import.meta.env.DEV) {
+	import('preact/debug');
 }
 
-require('./shares/constant');
+import preactPkg from 'preact/package.json';
 DI.register('Framework', {
-  ...require('preact/package.json'),
-  name: 'Preact',
+	...preactPkg,
+	name: 'Preact',
 });
-require('./shares/register');
 
 const htmlDivElement: HTMLDivElement | null = document.querySelector('div#app');
 if (htmlDivElement instanceof HTMLDivElement) {
-  htmlDivElement.style.display = 'inline';
-  render(<AppComponent />, htmlDivElement);
+	htmlDivElement.style.display = 'inline';
+	render(
+		<>
+			<AppComponent />
+			<PwaUpdatePrompt />
+		</>,
+		htmlDivElement,
+	);
 }
