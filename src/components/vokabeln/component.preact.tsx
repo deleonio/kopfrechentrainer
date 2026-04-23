@@ -33,9 +33,9 @@ export class VokabelnComponent extends ReactComponent<unknown, VokabelnControlle
 						/>
 					</Card>
 				)}
-				{currentEntry && (
-					<Card>
-						<Space direction="vertical" size="middle" style={{ width: '100%' }}>
+					{currentEntry && (
+						<Card>
+							<Space direction="vertical" size="middle" style={{ width: '100%' }}>
 							<Title level={4}>Übersetze</Title>
 							<Text strong>{prompt}</Text>
 							{this.showAnswer && (
@@ -44,33 +44,25 @@ export class VokabelnComponent extends ReactComponent<unknown, VokabelnControlle
 									<Text>{solution}</Text>
 								</>
 							)}
-							<Space>
 								<Button
 									type="primary"
 									onClick={() => {
-										this.showAnswer = !this.showAnswer;
 										if (this.showAnswer) {
+											this.showAnswer = false;
+											this.ctrl.nextEntry();
+											this.randomizeDirection();
+										} else {
+											this.showAnswer = true;
 											message.info('Antwort eingeblendet.');
 										}
 										this.forceUpdate();
 									}}
 								>
-									{this.showAnswer ? 'Antwort ausblenden' : 'Antwort anzeigen'}
-								</Button>
-								<Button
-									onClick={() => {
-										this.showAnswer = false;
-										this.ctrl.nextEntry();
-										this.randomizeDirection();
-										this.forceUpdate();
-									}}
-								>
-									Nächste Vokabel
+									{this.showAnswer ? 'Nächste Vokabel' : 'Antwort anzeigen'}
 								</Button>
 							</Space>
-						</Space>
-					</Card>
-				)}
+						</Card>
+					)}
 			</div>
 		);
 	}
