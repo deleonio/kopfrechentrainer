@@ -1,4 +1,4 @@
-import { Card, Empty, message, Space, Typography } from 'antd';
+import { Card, Empty, message, Space, Tag, Typography } from 'antd';
 import Button from 'antd/es/button';
 import { JSX } from 'preact';
 
@@ -22,6 +22,8 @@ export class VokabelnComponent extends ReactComponent<unknown, VokabelnControlle
 		const currentEntry = this.ctrl.getCurrentEntry();
 		const prompt = this.isReverseDirection ? currentEntry?.answer : currentEntry?.question;
 		const solution = this.isReverseDirection ? currentEntry?.question : currentEntry?.answer;
+		const total = this.ctrl.entries.length;
+		const current = total === 0 ? 0 : this.ctrl.currentPosition + 1;
 		return (
 			<div>
 				<h1>Vokabeln trainieren</h1>
@@ -34,18 +36,30 @@ export class VokabelnComponent extends ReactComponent<unknown, VokabelnControlle
 					</Card>
 				)}
 					{currentEntry && (
-						<Card>
-							<Space direction="vertical" size="middle" style={{ width: '100%' }}>
-							<Title level={4}>Übersetze</Title>
-							<Text strong>{prompt}</Text>
-							{this.showAnswer && (
-								<>
-									<Title level={5}>Antwort</Title>
-									<Text>{solution}</Text>
-								</>
-							)}
+						<Card bodyStyle={{ padding: '16px 16px 20px 16px' }}>
+							<Space direction="vertical" size="large" style={{ width: '100%', textAlign: 'center' }}>
+								<Tag color="blue" style={{ alignSelf: 'center', fontSize: '14px', padding: '6px 12px' }}>
+									{current} / {total}
+								</Tag>
+								<Title level={4} style={{ marginBottom: 0 }}>
+									Übersetze
+								</Title>
+								<Text strong style={{ fontSize: '32px', lineHeight: 1.2, display: 'block', minHeight: '72px' }}>
+									{prompt}
+								</Text>
+								{this.showAnswer && (
+									<>
+										<Title level={5} style={{ marginBottom: 0 }}>
+											Antwort
+										</Title>
+										<Text style={{ fontSize: '28px', lineHeight: 1.2, display: 'block', minHeight: '64px' }}>{solution}</Text>
+									</>
+								)}
 								<Button
 									type="primary"
+									size="large"
+									block
+									style={{ height: '56px', fontSize: '20px', fontWeight: 'bold' }}
 									onClick={() => {
 										if (this.showAnswer) {
 											this.showAnswer = false;
