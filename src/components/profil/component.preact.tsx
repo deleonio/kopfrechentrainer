@@ -177,7 +177,9 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
 
 					<Card>
 						<h2>Vokabelliste</h2>
-						<p>Hinterlege hier Deine Vokabeln im Format <b>Frage;Antwort</b> (eine Zeile pro Eintrag).</p>
+						<p>
+							Hinterlege hier Deine Vokabeln im Format <b>Frage;Antwort</b> (eine Zeile pro Eintrag).
+						</p>
 						<Row>
 							<Col style={{ width: '100%' }}>
 								<Form.Item label="Wortliste" name="vocabularyList">
