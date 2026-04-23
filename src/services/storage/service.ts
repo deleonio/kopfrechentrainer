@@ -122,6 +122,7 @@ export class StorageService {
 				operators: ['+', '-', '•', ':'],
 				difficultyMin: 1,
 				difficultyMax: 1,
+				vocabularyList: [],
 			},
 			results: [],
 			watermarks: {

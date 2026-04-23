@@ -12,6 +12,7 @@ export class ProfilController extends AbstractController {
 	public operators: string[];
 	public difficultyMin: number;
 	public difficultyMax: number;
+	public vocabularyRawText: string;
 
 	public constructor() {
 		super();
@@ -22,6 +23,7 @@ export class ProfilController extends AbstractController {
 			difficultyLevel?: number;
 			difficultyMin?: number;
 			difficultyMax?: number;
+			vocabularyList?: { question: string; answer: string }[];
 		}>('profil');
 		this.maxValue = profil.maxValue;
 		this.minValue = profil.minValue;
@@ -39,6 +41,7 @@ export class ProfilController extends AbstractController {
 		if (this.difficultyMin > this.difficultyMax) {
 			this.difficultyMax = this.difficultyMin;
 		}
+		this.vocabularyRawText = (profil.vocabularyList || []).map((entry) => `${entry.question};${entry.answer}`).join('\n');
 
 		const watermarks = this.storageService.getItem<{
 			dayLimit: number;
@@ -58,6 +61,7 @@ export class ProfilController extends AbstractController {
 				operators: this.operators,
 				difficultyMin: this.difficultyMin,
 				difficultyMax: this.difficultyMax,
+				vocabularyList: this.getVocabularyList(),
 			});
 		}
 	}
@@ -74,6 +78,7 @@ export class ProfilController extends AbstractController {
 			operators: this.operators,
 			difficultyMin: this.difficultyMin,
 			difficultyMax: this.difficultyMax,
+			vocabularyList: this.getVocabularyList(),
 		});
 		return true;
 	}
@@ -92,6 +97,7 @@ export class ProfilController extends AbstractController {
 			operators: this.operators,
 			difficultyMin: this.difficultyMin,
 			difficultyMax: this.difficultyMax,
+			vocabularyList: this.getVocabularyList(),
 		});
 	}
 
@@ -106,6 +112,46 @@ export class ProfilController extends AbstractController {
 				dayLimit: dayLimit,
 			});
 		}
+	}
+
+	private getVocabularyList(): { question: string; answer: string }[] {
+		return this.vocabularyRawText
+			.split(/\r?\n/)
+			.map((line) => line.trim())
+			.filter((line) => line.length > 0)
+			.map((line) => {
+				const [question, ...answerParts] = line.split(';');
+				return {
+					question: (question || '').trim(),
+					answer: answerParts.join(';').trim(),
+				};
+			})
+			.filter((entry) => entry.question.length > 0 && entry.answer.length > 0);
+	}
+
+	public setVocabularyRawText(vocabularyRawText: string): void {
+		this.vocabularyRawText = vocabularyRawText;
+		const vocabularyList = vocabularyRawText
+			.split(/\r?\n/)
+			.map((line) => line.trim())
+			.filter((line) => line.length > 0)
+			.map((line) => {
+				const [question, ...answerParts] = line.split(';');
+				return {
+					question: (question || '').trim(),
+					answer: answerParts.join(';').trim(),
+				};
+			})
+			.filter((entry) => entry.question.length > 0 && entry.answer.length > 0);
+
+		this.storageService.setItem('profil', {
+			minValue: this.minValue,
+			maxValue: this.maxValue,
+			operators: this.operators,
+			difficultyMin: this.difficultyMin,
+			difficultyMax: this.difficultyMax,
+			vocabularyList: vocabularyList,
+		});
 	}
 
 	public deleteProfile(): void {

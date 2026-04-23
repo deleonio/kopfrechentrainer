@@ -14,6 +14,7 @@ import { InfoComponent } from '../info/component.preact';
 import { ProfilComponent } from '../profil/component.preact';
 import { RechnenComponent } from '../rechnen/component.preact';
 import { StartComponent } from '../start/component.preact';
+import { VokabelnComponent } from '../vokabeln/component.preact';
 import { AppController } from './controller';
 
 const APP_METADATE = {
@@ -50,15 +51,20 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
 						)}
 						{hasActiveProfile && (
 							<Menu.Item key="2">
-								<a href="#history">Verlauf</a>
+								<a href="#vokabeln">Vokabeln</a>
 							</Menu.Item>
 						)}
 						{hasActiveProfile && (
 							<Menu.Item key="3">
+								<a href="#history">Verlauf</a>
+							</Menu.Item>
+						)}
+						{hasActiveProfile && (
+							<Menu.Item key="4">
 								<a href="#profil">Profil</a>
 							</Menu.Item>
 						)}
-						<Menu.Item key="4">
+						<Menu.Item key="5">
 							<a href="#info">Info</a>
 						</Menu.Item>
 					</Menu>
@@ -71,6 +77,9 @@ export class AppComponent extends ReactComponent<unknown, AppController> impleme
 							</Route>
 							<Route exact path="/">
 								{hasActiveProfile ? <RechnenComponent /> : <StartComponent />}
+							</Route>
+							<Route exact path="/vokabeln">
+								{hasActiveProfile ? <VokabelnComponent /> : <StartComponent />}
 							</Route>
 							<Route exact path="/history">
 								{hasActiveProfile ? <HistoryComponent /> : <StartComponent />}
