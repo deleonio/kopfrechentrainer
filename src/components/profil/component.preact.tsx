@@ -2,6 +2,7 @@ import { Card, Form, message, Row } from 'antd';
 import Button from 'antd/es/button';
 import Checkbox from 'antd/es/checkbox';
 import Col from 'antd/es/grid/col';
+import Input from 'antd/es/input';
 import InputNumber from 'antd/es/input-number';
 import Slider from 'antd/es/slider';
 import Modal from 'antd/lib/modal/Modal';
@@ -46,6 +47,7 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
 						dayLimit: this.ctrl.dayLimit,
 						operators: this.ctrl.operators,
 						difficulty: this.ctrl.difficultyMin,
+						vocabularyList: this.ctrl.vocabularyRawText,
 					}}
 					noValidate={true}
 				>
@@ -166,6 +168,29 @@ export class ProfilComponent extends ReactComponent<unknown, ProfilController> i
 											}
 											this.forceUpdate();
 										}}
+									/>
+								</Form.Item>
+							</Col>
+						</Row>
+					</Card>
+					<br />
+
+					<Card>
+						<h2>Vokabelliste</h2>
+						<p>
+							Hinterlege hier Deine Vokabeln im Format <b>Frage;Antwort</b> (eine Zeile pro Eintrag).
+						</p>
+						<Row>
+							<Col style={{ width: '100%' }}>
+								<Form.Item label="Wortliste" name="vocabularyList">
+									<Input.TextArea
+										autoSize={{ minRows: 6, maxRows: 12 }}
+										onChange={(event) => {
+											this.ctrl.setVocabularyRawText(event.currentTarget.value);
+											message.success('Vokabelliste wurde gespeichert.');
+											this.forceUpdate();
+										}}
+										placeholder={'hallo;hello\nKatze;cat'}
 									/>
 								</Form.Item>
 							</Col>
