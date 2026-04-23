@@ -12,9 +12,16 @@ const { Text, Title } = Typography;
 export class VokabelnComponent extends ReactComponent<unknown, VokabelnController> implements GenericComponent {
 	public readonly ctrl: VokabelnController = new VokabelnController();
 	private showAnswer = false;
+	private isReverseDirection = Math.random() >= 0.5;
+
+	private randomizeDirection(): void {
+		this.isReverseDirection = Math.random() >= 0.5;
+	}
 
 	public render(): JSX.Element {
 		const currentEntry = this.ctrl.getCurrentEntry();
+		const prompt = this.isReverseDirection ? currentEntry?.answer : currentEntry?.question;
+		const solution = this.isReverseDirection ? currentEntry?.question : currentEntry?.answer;
 		return (
 			<div>
 				<h1>Vokabeln trainieren</h1>
@@ -29,12 +36,12 @@ export class VokabelnComponent extends ReactComponent<unknown, VokabelnControlle
 				{currentEntry && (
 					<Card>
 						<Space direction="vertical" size="middle" style={{ width: '100%' }}>
-							<Title level={4}>Frage</Title>
-							<Text strong>{currentEntry.question}</Text>
+							<Title level={4}>Übersetze</Title>
+							<Text strong>{prompt}</Text>
 							{this.showAnswer && (
 								<>
 									<Title level={5}>Antwort</Title>
-									<Text>{currentEntry.answer}</Text>
+									<Text>{solution}</Text>
 								</>
 							)}
 							<Space>
@@ -54,6 +61,7 @@ export class VokabelnComponent extends ReactComponent<unknown, VokabelnControlle
 									onClick={() => {
 										this.showAnswer = false;
 										this.ctrl.nextEntry();
+										this.randomizeDirection();
 										this.forceUpdate();
 									}}
 								>
