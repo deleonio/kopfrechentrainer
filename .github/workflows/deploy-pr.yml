@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist-${{ env.SLUG }}-${{ github.event.pull_request.head.sha }}
           path: dist/
